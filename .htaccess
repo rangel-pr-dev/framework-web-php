@@ -1,0 +1,15 @@
+Options -Indexes
+RewriteEngine On
+RewriteBase /
+
+# APP_AMBIENTE 
+# Defina "local" para que o Ambiente seja tratado como Local
+# Defina "producao" para que o Ambiente seja tratado como Produção
+SetEnv APP_AMBIENTE local
+
+# Se o arquivo ou diretório existir, não reescreve
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redireciona URLs amigáveis para index.php
+RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
