@@ -1,4 +1,6 @@
-<?php /** @var App\Visao_Modelo\VMBasePagina $visaoModelo */ ?>
+<?php
+/** @var App\Visao_Modelo\VMBasePagina $visaoModelo */
+?>
 <!-- bootstrap css -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
 <!-- bootstrap icons css -->

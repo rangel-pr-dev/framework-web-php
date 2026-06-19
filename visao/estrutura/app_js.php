@@ -1,4 +1,6 @@
-<?php /** @var App\Visao_Modelo\VMBasePagina $visaoModelo */ ?>
+<?php
+/** @var App\Visao_Modelo\VMBasePagina $visaoModelo */
+?>
 <!-- jquery js -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- bootstrap js -->

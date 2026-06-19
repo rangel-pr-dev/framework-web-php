@@ -1,4 +1,6 @@
-<?php /** @var App\Visao_Modelo\VMBasePagina $visaoModelo */ ?>
+<?php
+/** @var App\Visao_Modelo\VMBasePagina $visaoModelo */
+?>
 <?php if ($visaoModelo->dadoSeleciona()->googleServicoExibe): ?>
     <div class="d-block w-100">
         <!-- Principal -->
