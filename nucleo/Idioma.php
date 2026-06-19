@@ -25,6 +25,12 @@ class Idioma
         return self::IDIOMA_LISTA[self::IDIOMA_PT_BR];
     }
 
+    //
+    public static function idiomaLista(): array
+    {
+        return self::IDIOMA_LISTA;
+    }
+
     public static function idiomaPTBR(): string
     {
         return self::IDIOMA_LISTA[self::IDIOMA_PT_BR];

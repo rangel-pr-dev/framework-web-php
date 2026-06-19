@@ -25,6 +25,12 @@ class Tema
         return self::TEMA_LISTA[self::TEMA_DIA];
     }
 
+    //
+    public static function temaLista(): array
+    {
+        return self::TEMA_LISTA;
+    }
+
     public static function temaDia(): string
     {
         return self::TEMA_LISTA[self::TEMA_DIA];
