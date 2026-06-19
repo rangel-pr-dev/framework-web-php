@@ -4,24 +4,32 @@ namespace App\Base_Dado\Entidade;
 class BDItem
 {
     //
-    public $id;
-    public $idItemTipo;
-    public $qualidade;
-    public $idRelacionamento;
-    public $nome;
+    public int $id;
+    public int $idItemTipo;
+    public int $qualidade;
+    public int $idRelacionamento;
+    public string $nome;
 
     //
     public ?BDItemTipo $itemTipo;
 
     //
+    /**
+     * @param int $id
+     * @param int $idItemTipo
+     * @param int $qualidade
+     * @param int $idRelacionamento
+     * @param string $nome
+     * @param ?BDItemTipo $itemTipo
+     */
     public function __construct(
 
         //
-        $id,
-        $idItemTipo,
-        $qualidade,
-        $idRelacionamento,
-        $nome,
+        int $id,
+        int $idItemTipo,
+        int $qualidade,
+        int $idRelacionamento,
+        string $nome,
 
         //
         ?BDItemTipo $itemTipo = null,

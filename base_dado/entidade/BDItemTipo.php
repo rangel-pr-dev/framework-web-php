@@ -4,17 +4,22 @@ namespace App\Base_Dado\Entidade;
 class BDItemTipo
 {
     //
-    public $id;
-    public $ordem;
-    public $nome;
+    public int $id;
+    public int $ordem;
+    public string $nome;
 
     //
+    /**
+     * @param int $id
+     * @param int $ordem
+     * @param string $nome
+     */
     public function __construct(
 
         //
-        $id,
-        $ordem,
-        $nome,
+        int $id,
+        int $ordem,
+        string $nome,
 
     ) {
 
