@@ -5,7 +5,7 @@ use Throwable;
 
 class Apresentacao
 {
-    public static function imagemFundo($qualidade)
+    public static function imagemFundo(int $qualidade): string
     {
         return match ($qualidade) {
 
@@ -17,7 +17,7 @@ class Apresentacao
         };
     }
 
-    public static function perfilQualidade($qualidade)
+    public static function perfilQualidade(int $qualidade): string
     {
         $estrelas = '';
         $quantidade = (int) $qualidade;
@@ -29,7 +29,7 @@ class Apresentacao
         return $estrelas;
     }
 
-    public static function imagemUri($imagemCaminho)
+    public static function imagemUri(string $imagemCaminho): string
     {
         try {
 
