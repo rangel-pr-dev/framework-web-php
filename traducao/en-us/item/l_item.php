@@ -1,5 +1,6 @@
 <?php
 return [
+    "titulo" => "Items",
     "filtro_titulo" => "Filters",
     "filtro_descricao" => "Select search criteria.",
     "filtro_atributo_nome" => "Name",
