@@ -19,6 +19,9 @@ class Rota
     //
     public const ROTA_CONFIGURA = "CONFIGURA";
 
+    public const PARAMETRO_TEMA = "tema";
+    public const PARAMETRO_IDIOMA = "idioma";
+
     //
     public const ROTA_INICIO = "INICIO";
     public const ROTA_SOBRE = "SOBRE";
@@ -38,7 +41,6 @@ class Rota
     public const PARAMETRO_ITEM_NOME = "nome";
     public const PARAMETRO_ITEM_TIPO = "tipo";
     public const PARAMETRO_ITEM_QUALIDADE = "qualidade";
-    public const PARAMETRO_TEMA = "tema";
 
     //
     public const ROTA_METODO = "metodo";
@@ -49,9 +51,6 @@ class Rota
     public const ROTA_BFF = "bff";
     public const ROTA_FILTRO = "filtro";
     public const ROTA_PAGINACAO = "paginacao";
-
-    //
-    public const PARAMETRO_IDIOMA = "idioma";
 
     //
     public const ROTA_LISTA = [
