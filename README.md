@@ -342,6 +342,14 @@ Controller BFF da entidade `Item`.
 - `itemListaPaginacao()`: valida JSON, busca o proximo lote, renderiza fragmento `Fragmento::ITEM_LISTA` e retorna HTML + deslocamento.
 - Usa `DTOBFFRespostaLocalizacao` e `DTOBFFRespostaPaginacao` para padronizar respostas.
 
+#### `BFFContratoItem`
+
+Contrato de nomes específico da entidade `Item` para integração BFF.
+
+- Centraliza chaves de entrada e saída para requisições assincronos do modulo `Item`.
+- Evita strings soltas entre `principal.js` e `BFFItem`.
+- Complementa `BFFContrato` com constantes específicas do dominio.
+
 #### `CValidacao`
 
 Validador estatico de entrada.
@@ -375,6 +383,14 @@ Resposta de paginacao assincrona.
 
 - Transporta o HTML renderizado do fragmento.
 - Transporta o novo deslocamento da lista.
+
+#### `DTOAppConfiguracao`
+
+Normaliza dados de configuracao da aplicacao.
+
+- Recebe dados de `$_GET` ou JSON do BFF.
+- Converte e valida parametros de idioma e tema.
+- Prepara dados para atualizacoes de sessao.
 
 ### Modelo (`App\Modelo`)
 
@@ -507,9 +523,59 @@ ViewModel da pagina Sobre.
 
 Presenter global da aplicacao.
 
-- Transporta ambiente, idioma, tema, token BFF, rotas, textos estruturais e flags de exibicao.
-- Entrega dados seguros para views e JavaScript.
-- O metodo `dado()` exporta esses valores como array.
+Transporta todos os dados globais necessarios para views e JavaScript:
+
+**App Configuracao:**
+
+- `ambiente`: ambiente atual (local, producao).
+- `idioma`: idioma ativo.
+- `tema`: tema ativo (dia, noite).
+- `appEmail`: email institucional.
+- `logomarca`: URI da logomarca.
+- `appCodigoSolicitacao`: token CSRF da sessao para BFF.
+- `appLogExibe`: flag para exibir logs no ambiente.
+- `layoutFluido`: flag para layout responsivo.
+- `layoutMenuGlobal`: flag para exibir menu global.
+- `layoutMenuContexto`: flag para exibir menu contexto.
+
+**Google Services:**
+
+- `googleAnalyticsId`: ID do Google Analytics (nullable).
+- `googleAdClient`: cliente Google AdSense (nullable).
+- `googleAdSlot`: slot Google AdSense (nullable).
+- `appAdsTag`: conteudo de ads.txt.
+- `googleServicoExibe`: flag para renderizar blocos de anuncio.
+
+**Integracao Externa:**
+
+- `appPaypalId`: ID PayPal (nullable).
+- `rotaPortfolio`: URL do portfolio.
+- `rotaLinkedin`: URL do LinkedIn.
+- `rotaGithub`: URL do GitHub.
+
+**Rotas:**
+
+- `rotaRaiz`, `rotaInicio`, `rotaSobre`, `rotaContato`, `rotaTermosUso`, `rotaPoliticaPrivacidade`: rotas institucionais.
+- `rotaItens`: rota de listagem de itens.
+- `rotaLinguagemPortugues`, `rotaLinguagemIngles`: rotas de troca de idioma.
+- `rotaMapeamentoPortugues`, `rotaMapeamentoIngles`: rotas de sitemap por idioma.
+- `rotaTemaDia`, `rotaTemaNoite`: rotas de troca de tema.
+- `urlBase`: URL absoluta da aplicacao.
+
+**BFF (Backend for Frontend):**
+
+- `rotaItensFiltroBFF`: endpoint de filtro assincrono.
+- `rotaItensPaginacaoBFF`: endpoint de paginacao assincrona.
+- `bffContrato`: array de chaves de contrato JavaScript-PHP.
+
+**Conteudo de Texto:**
+
+- `textoNavegacao`: textos estruturais de navegacao.
+- `textoRodape`: textos estruturais de rodape.
+- `textoMenu`: textos estruturais de menu.
+- `textoLateral`: textos estruturais de lateral.
+
+O metodo `dado()` exporta todos esses valores como array para uso em views e JavaScript.
 
 #### `VPItemLista`
 
@@ -525,6 +591,14 @@ Presenter de item selecionado.
 - Prepara dados do detalhe do item.
 - Encapsula acessos a entidade e relacionamentos para a view.
 
+#### `VPItemTipo`
+
+Presenter de tipo de item.
+
+- Converte entidades `BDItemTipo` em dados formatados para exibição.
+- Prepara dados de tipos para filtros e seleções.
+- Centraliza formatação de tipos de item na apresentação.
+
 ### Views (`visao/`)
 
 As views sao arquivos PHP/HTML que recebem um ViewModel ja montado.
@@ -535,7 +609,16 @@ As views sao arquivos PHP/HTML que recebem um ViewModel ja montado.
 - `visao/estrutura/app_navegacao.php`: navegacao superior.
 - `visao/estrutura/app_rodape.php`: rodape.
 - `visao/estrutura/app_google_ad.php`: bloco de anuncio.
-- `visao/menu/`: componentes de menu.
+- `visao/app_ads.php`: anuncios.
+- `visao/app_robots.php`: arquivo robots.txt renderizado.
+- `visao/app_inicio.php`: pagina home.
+- `visao/app_inicio_secao.php`: secao da pagina inicial.
+- `visao/app_sobre.php`, `visao/app_contato.php`, `visao/app_termos_uso.php`, `visao/app_politica_privacidade.php`: paginas institucionais.
+- `visao/menu/`: componentes de menu, incluindo menus contexto e menu global.
+- `visao/menu/app_menu_global.php`: menu global da aplicacao.
+- `visao/menu/app_menu_contexto_corpo.php`: menu contexto do corpo.
+- `visao/menu/app_menu_contexto_lateral.php`: menu contexto da lateral.
+- `visao/menu/app_menu_contexto_suspenso.php`: menu contexto suspenso.
 - `visao/lateral/`: componentes laterais.
 - `visao/item/`: paginas e fragmentos da entidade `Item`.
 
@@ -638,13 +721,13 @@ O modulo `Item` demonstra o fluxo completo do framework.
 
 - Banco: `BDItem`, `BDItemTipo` e script `base_dado/sql/bd_framework.sql`.
 - Modelo: `MItem` consulta listas, filtros, detalhes e relacionamentos.
-- DTO: `DTOItemFiltro` normaliza entradas web e BFF.
+- DTOs: `DTOItemFiltro` normaliza entradas web e BFF.
 - Controller web: `CItem` renderiza lista e detalhe.
-- Controller BFF: `BFFItem` atende filtro e paginacao assincrona.
-- Presenters: `VPItemLista` e `VPItemSelecao` adaptam entidades para exibicao.
+- Controller BFF: `BFFItem` atende filtro e paginacao assincrona com contrato em `BFFContratoItem`.
+- Presenters: `VPItemLista`, `VPItemSelecao` e `VPItemTipo` adaptam entidades para exibicao.
 - ViewModels: `VMItemLista`, `VMItemListaFiltro`, `VMItemListaFragmento`, `VMItemSeleciona`.
-- Views: `visao/item/l_item.php`, `visao/item/s_item.php` e fragmentos relacionados.
-- Rotas: `ROTA_ITEMS`, `ROTA_ITEM`, `ROTA_ITEMS_FILTRO`, `ROTA_ITEMS_PAGINACAO`.
+- Views: `visao/item/l_item.php` (listagem), `visao/item/s_item.php` (detalhe), `visao/item/item.php` (card), `visao/item/lb_item.php` (fragmento), `visao/item/item_relacionado.php` (relacionados).
+- Rotas: `ROTA_ITEMS`, `ROTA_ITEM`, `ROTA_ITEM_RELACIONADOS`, `ROTA_ITEMS_FILTRO`, `ROTA_ITEMS_PAGINACAO`.
 - Textos: `traducao/{idioma}/item/l_item.php` e `traducao/{idioma}/item/s_item.php`.
 
 ## Guia: Criando um Novo Modulo
