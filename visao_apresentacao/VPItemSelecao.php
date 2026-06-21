@@ -8,47 +8,61 @@ use App\Base_Dado\Entidade\BDItem;
 class VPItemSelecao
 {
     //
-    public $id;
-    public $idItemTipo;
-    public $qualidade;
-    public $idRelacionamento;
-    public $nome;
+    public int $id;
+    public string $idItemTipo;
+    public int $qualidade;
+    public string $idRelacionamento;
+    public string $nome;
 
     //
-    public $itemTipo;
+    public ?VPItemTipo $itemTipo;
 
     //
-    public $imagemFundo;
-    public $qualidadeHtml;
-    public $imagem;
+    public string $imagemFundo;
+    public string $qualidadeHtml;
+    public string $imagem;
 
     //
-    public $rotaItem;
-    public $rotaItemTipo;
-    public $rotaItemRelacionado;
+    public string $rotaItem;
+    public string $rotaItemTipo;
+    public string $rotaItemRelacionado;
 
     //
+    /**
+     * @param int $id
+     * @param string $idItemTipo
+     * @param int $qualidade
+     * @param string $idRelacionamento
+     * @param string $nome
+     * @param ?VPItemTipo $itemTipo
+     * @param string $imagemFundo
+     * @param string $qualidadeHtml
+     * @param string $imagem
+     * @param string $rotaItem
+     * @param string $rotaItemTipo
+     * @param string $rotaItemRelacionado
+     */
     public function __construct(
 
         //
-        $id,
-        $idItemTipo,
-        $qualidade,
-        $idRelacionamento,
-        $nome,
+        int $id,
+        string $idItemTipo,
+        int $qualidade,
+        string $idRelacionamento,
+        string $nome,
 
         //
-        $itemTipo,
+        ?VPItemTipo $itemTipo,
 
         //
-        $imagemFundo,
-        $qualidadeHtml,
-        $imagem,
+        string $imagemFundo,
+        string $qualidadeHtml,
+        string $imagem,
 
         //
-        $rotaItem,
-        $rotaItemTipo,
-        $rotaItemRelacionado,
+        string $rotaItem,
+        string $rotaItemTipo,
+        string $rotaItemRelacionado,
     ) {
 
         //
@@ -132,7 +146,7 @@ class VPItemSelecao
             $bdItem->nome,
 
             //
-            $bdItem->itemTipo->dado(),
+            VPItemTipo::vpItemFabrica($bdItem->itemTipo),
 
             //
             Apresentacao::imagemFundo($bdItem->qualidade),

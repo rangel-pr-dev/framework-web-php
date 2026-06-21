@@ -7,9 +7,11 @@
     </div>
 </div>
 <div class="row">
+    <!-- menu lateral -->
     <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2 col-xxl-2">
-        <?php include "./visao/menu/app_menu.php"; ?>
+        <?php include "./visao/menu/app_menu_contexto_lateral.php"; ?>
     </div>
+    <!-- conteudo -->
     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-8 col-xxl-8">
         <!-- item_lista_filtro -->
         <div class="row">
@@ -160,6 +162,7 @@
             </div>
         </div>
     </div>
+    <!-- app lateral -->
     <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2 col-xxl-2">
         <?php include "./visao/lateral/app_lateral.php"; ?>
     </div>

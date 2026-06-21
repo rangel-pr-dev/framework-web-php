@@ -1,4 +1,6 @@
-<?php /** @var App\Visao_Modelo\VMBasePagina $visaoModelo */ ?>
+<?php
+/** @var App\Visao_Modelo\VMBasePagina $visaoModelo */
+?>
 <p class="px-3 my-3">
     <?php echo $visaoModelo->textoMenu("sessao_menu_1"); ?>
 </p>
@@ -12,7 +14,6 @@
         <?php echo $visaoModelo->textoMenu("bt_item"); ?>
     </a>
 </div>
-
 <p class="px-3 my-3">
     <?php echo $visaoModelo->textoMenu("sessao_menu_2"); ?>
 </p>

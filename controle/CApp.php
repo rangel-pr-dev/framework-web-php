@@ -14,6 +14,8 @@ use App\Nucleo\Erro;
 use App\Modelo\MApp;
 use App\Modelo\MItem;
 
+use App\Controle\Dado\DTOAppConfiguracao;
+
 use App\Visao_Modelo\VMBaseErro;
 use App\Visao_Modelo\VMBaseGenerico;
 use App\Visao_Modelo\VMMapeamento;
@@ -23,10 +25,7 @@ class CApp
     //
     public static function appRaiz()
     {
-        $idioma = Idioma::idiomaValidoOuPadrao(Sessao::idiomaSeleciona());
-
-        header("Location: " . (new MApp())->dado()->urlBase . "/{$idioma}", true, 302);
-
+        header("Location: " . Rota::rotaInicio(), true, 302);
         exit;
     }
 
@@ -132,7 +131,7 @@ class CApp
             $urlBase . $appDado->rotaPoliticaPrivacidade,
             $urlBase . $appDado->rotaItens,
         ];
-        
+
         $itemLista = $itemModelo->itemLista();
 
         foreach ($itemLista as $item) {
@@ -153,31 +152,41 @@ class CApp
     //
     public static function appConfigura()
     {
-        $tema = $_GET[Rota::PARAMETRO_TEMA] ?? null;
-        $idioma = $_GET[Rota::PARAMETRO_IDIOMA] ?? null;
+        $entradaDado = $_GET;
+        $entradaDado['url'] = $_SERVER["HTTP_REFERER"] ?? Rota::rotaRaiz();
 
-        $url = $_SERVER["HTTP_REFERER"] ?? Rota::rotaRaiz();
+        $configura = DTOAppConfiguracao::dtoAppConfiguracao($entradaDado);
 
-        if ($tema !== null && Tema::temaSuportado($tema)) {
+        $url = $configura->entradaUrl ?: Rota::rotaRaiz();
 
-            Sessao::temaAtualiza($tema);
+        //
+        if (
+            $configura->entradaTema !== null &&
+            Tema::temaSuportado($configura->entradaTema)
+        ) {
+
+            Sessao::temaAtualiza($configura->entradaTema);
         }
 
-        if ($idioma !== null && Idioma::idiomaSuportado($idioma)) {
+        //
+        if (
+            $configura->entradaIdioma !== null &&
+            Idioma::idiomaSuportado($configura->entradaIdioma)
+        ) {
 
             $idiomaAtual = Contexto::idiomaSeleciona();
 
             $appDado = (new MApp())->dado();
             $urlBase = $appDado->urlBase;
 
-            Sessao::idiomaAtualiza($idioma);
-            Contexto::idiomaAtualiza($idioma);
+            Sessao::idiomaAtualiza($configura->entradaIdioma);
+            Contexto::idiomaAtualiza($configura->entradaIdioma);
 
             // Garante a substituição exata do segmento de idioma na URL
-            $url = str_replace($urlBase . "/" . $idiomaAtual, $urlBase . "/" . $idioma, $url);
+            $url = str_replace($urlBase . "/" . $idiomaAtual, $urlBase . "/" . $configura->entradaIdioma, $url);
 
             if ($url === ($_SERVER["HTTP_REFERER"] ?? '')) {
-                $url = $urlBase . "/" . $idioma;
+                $url = $urlBase . "/" . $configura->entradaIdioma;
             }
         }
 

@@ -44,7 +44,7 @@ class CInicio
         );
 
         $visaoModelo = VMInicio::sucesso(
-            $appModelo->dado(),
+            $appModelo->dado(true, false, true),
             $appModelo->textoPagina(Pagina::APP_INICIO),
             new VMItemListaFragmento(VPItemLista::vpItemFabricaLista($itemLista1)),
             new VMItemListaFragmento(VPItemLista::vpItemFabricaLista($itemLista2)),
@@ -59,7 +59,7 @@ class CInicio
         $appServico = new AppServico();
 
         $visaoModelo = VMSobre::sucesso(
-            $appModelo->dado(false),
+            $appModelo->dado(false, true),
             $appModelo->textoPagina(Pagina::APP_SOBRE),
             $appServico->sobreTopicoLista()
         );
@@ -72,7 +72,7 @@ class CInicio
         $appModelo = new MApp();
 
         $visaoModelo = VMBaseGenerico::sucesso(
-            $appModelo->dado(false),
+            $appModelo->dado(false, true),
             $appModelo->textoPagina(Pagina::APP_CONTATO),
         );
 
@@ -84,7 +84,7 @@ class CInicio
         $appModelo = new MApp();
 
         $visaoModelo = VMBaseGenerico::sucesso(
-            $appModelo->dado(false),
+            $appModelo->dado(false, true),
             $appModelo->textoPagina(Pagina::APP_TERMOS_USO),
         );
 
@@ -96,7 +96,7 @@ class CInicio
         $appModelo = new MApp();
 
         $visaoModelo = VMBaseGenerico::sucesso(
-            $appModelo->dado(false),
+            $appModelo->dado(false, true),
             $appModelo->textoPagina(Pagina::APP_POLITICA_PRIVACIDADE),
         );
 

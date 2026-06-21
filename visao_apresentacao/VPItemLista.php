@@ -8,43 +8,55 @@ use App\Base_Dado\Entidade\BDItem;
 class VPItemLista
 {
     //
-    public $id;
-    public $idItemTipo;
-    public $qualidade;
-    public $idRelacionamento;
-    public $nome;
+    public int $id;
+    public string $idItemTipo;
+    public int $qualidade;
+    public string $idRelacionamento;
+    public string $nome;
 
     //
-    public $itemTipo;
+    public ?VPItemTipo $itemTipo;
 
     //
-    public $imagemFundo;
-    public $qualidadeHtml;
-    public $imagem;
+    public string $imagemFundo;
+    public string $qualidadeHtml;
+    public string $imagem;
 
     //
-    public $rotaItem;
+    public string $rotaItem;
 
     //
+    /**
+     * @param int $id
+     * @param string $idItemTipo
+     * @param int $qualidade
+     * @param string $idRelacionamento
+     * @param string $nome
+     * @param ?VPItemTipo $itemTipo
+     * @param string $imagemFundo
+     * @param string $qualidadeHtml
+     * @param string $imagem
+     * @param string $rotaItem
+     */
     public function __construct(
 
         //
-        $id,
-        $idItemTipo,
-        $qualidade,
-        $idRelacionamento,
-        $nome,
+        int $id,
+        string $idItemTipo,
+        int $qualidade,
+        string $idRelacionamento,
+        string $nome,
 
         //
-        $itemTipo,
+        ?VPItemTipo $itemTipo,
 
         //
-        $imagemFundo,
-        $qualidadeHtml,
-        $imagem,
+        string $imagemFundo,
+        string $qualidadeHtml,
+        string $imagem,
 
         //
-        $rotaItem,
+        string $rotaItem,
     ) {
 
         //
@@ -79,7 +91,7 @@ class VPItemLista
             "nome" => $this->nome,
 
             //
-            "item_tipo" => $this->itemTipo,
+            "item_tipo" => $this->itemTipo ? $this->itemTipo->dado() : null,
 
             //
             "imagem_fundo" => $this->imagemFundo,
@@ -125,7 +137,7 @@ class VPItemLista
             $bdItem->nome,
 
             //
-            ["id" => $bdItem->idItemTipo],
+            $bdItem->itemTipo ? VPitemTipo::vpItemFabrica($bdItem->itemTipo) : null,
 
             //
             Apresentacao::imagemFundo($bdItem->qualidade),

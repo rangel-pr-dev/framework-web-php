@@ -10,7 +10,7 @@
         <!-- **** -->
         <div class="d-flex align-items-center ms-auto">
             <ul class="navbar-nav flex-row">
-                <!-- Linguagem -->
+                <!-- linguagem -->
                 <li class="nav-item dropdown me-2">
                     <a class="nav-link px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-translate"></i>
@@ -28,7 +28,7 @@
                         </li>
                     </ul>
                 </li>
-                <!-- Tema -->
+                <!-- tema -->
                 <li class="nav-item dropdown me-2">
                     <a class="nav-link px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi <?php echo ($visaoModelo->dadoSeleciona()->tema === 'dark') ? 'bi-moon-stars-fill' : 'bi-brightness-high-fill'; ?>"></i>
@@ -49,22 +49,22 @@
                     </ul>
                 </li>
             </ul>
-            <!-- **** -->
-            <button class="navbar-toggler border-0 ms-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu-suspenso" aria-controls="menu-suspenso" aria-label="XXXX">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <!-- menu global (ancora) -->
+            <?php if ($visaoModelo->dadoSeleciona()->layoutMenuGlobal): ?>
+                <button class="navbar-toggler border-0 ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#menu-global" aria-controls="menu-global" aria-label="XXXX">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            <?php endif; ?>
+            <!-- menu contexto suspenso (ancora) -->
+            <?php if ($visaoModelo->dadoSeleciona()->layoutMenuContexto): ?>
+                <button class="navbar-toggler border-0 ms-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu-contexto-suspenso" aria-controls="menu-contexto-suspenso" aria-label="XXXX">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            <?php endif; ?>
         </div>
-        <!-- **** -->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="menu-suspenso" aria-labelledby="menu-suspenso-titulo">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="menu-suspenso-titulo">
-                    <?php echo $visaoModelo->textoNavegacao("menu"); ?>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="XXXX"></button>
-            </div>
-            <div class="offcanvas-body">
-                <?php include "visao/menu/app_menu_suspenso.php"; ?>
-            </div>
-        </div>
+        <!-- menu global -->
+        <?php include "visao/menu/app_menu_global.php"; ?>
+        <!-- menu contexto suspenso -->
+        <?php include "visao/menu/app_menu_contexto_suspenso.php"; ?>
     </div>
 </nav>

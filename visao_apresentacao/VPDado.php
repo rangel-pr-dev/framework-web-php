@@ -12,6 +12,8 @@ class VPDado
     public string $appCodigoSolicitacao;
     public bool $appLogExibe;
     public bool $layoutFluido;
+    public bool $layoutMenuGlobal;
+    public bool $layoutMenuContexto;
 
     // Google Services
     public ?string $googleAnalyticsId;
@@ -70,6 +72,8 @@ class VPDado
         string $appCodigoSolicitacao,
         bool $appLogExibe,
         bool $layoutFluido,
+        bool $layoutMenuGlobal,
+        bool $layoutMenuContexto,
 
         // Google Services
         ?string $googleAnalyticsId,
@@ -126,6 +130,8 @@ class VPDado
         $this->appCodigoSolicitacao = $appCodigoSolicitacao;
         $this->appLogExibe = $appLogExibe;
         $this->layoutFluido = $layoutFluido;
+        $this->layoutMenuGlobal = $layoutMenuGlobal;
+        $this->layoutMenuContexto = $layoutMenuContexto;
 
         // Google Services
         $this->googleAnalyticsId = $googleAnalyticsId;
@@ -186,6 +192,8 @@ class VPDado
             "appCodigoSolicitacao" => $this->appCodigoSolicitacao,
             "appLogExibe" => $this->appLogExibe,
             "layoutFluido" => $this->layoutFluido,
+            "layoutMenuGlobal" => $this->layoutMenuGlobal,
+            "layoutMenuContexto" => $this->layoutMenuContexto,
 
             // Google Services
             "googleAnalyticsId" => $this->googleAnalyticsId,

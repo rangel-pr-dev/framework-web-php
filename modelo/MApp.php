@@ -44,10 +44,24 @@ class MApp
         return $protocolo . "://" . $host . $diretorio;
     }
 
-    //
+    /**
+     * @param bool $layoutFluido
+     * @param bool $layoutMenuGlobal
+     * @param bool $layoutMenuContexto
+     * @param array $contratoBFFAdicional
+     */
     public function dado(
-        $layoutFluido = true
+        bool $layoutFluido = true,
+        bool $layoutMenuGlobal = false,
+        bool $layoutMenuContexto = false,
+        array $contratoBFFAdicional = []
     ): VPDado {
+
+        $contratoBFF = array_merge(
+            BFFContrato::dadoGlobal(),
+            $contratoBFFAdicional
+        );
+
         return new VPDado(
 
             // App Configuração
@@ -59,6 +73,8 @@ class MApp
             Sessao::codigoSolicitacaoSeleciona(),
             Configuracao::ambienteAtual() === Configuracao::AMBIENTE_LOCAL,
             $layoutFluido,
+            $layoutMenuGlobal,
+            $layoutMenuContexto,
 
             // Google Services
             Configuracao::googleAnalyticsId(),
@@ -97,7 +113,7 @@ class MApp
             // BFF
             Rota::rotaItensFiltroBFF(),
             Rota::rotaItensPaginacaoBFF(),
-            BFFContrato::dado(),
+            $contratoBFF,
 
             // Conteudo Texto
             $this->textoEstrutura(TextoEstrutura::NAVEGACAO),

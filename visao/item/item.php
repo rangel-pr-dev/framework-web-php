@@ -15,7 +15,7 @@
                 <?php echo $visaoModelo->itemSeleciona()->qualidadeHtml; ?>
             </p>
             <a class="fs-6 link-info text-decoration-none" href="<?php echo $visaoModelo->itemSeleciona()->rotaItemTipo; ?>">
-                <?php echo $visaoModelo->itemSeleciona()->itemTipo["nome"]; ?>
+                <?php echo $visaoModelo->itemSeleciona()->itemTipo->nome; ?>
             </a>
         </div>
     </div>
@@ -24,7 +24,7 @@
 <div class="row mt-5" data-aos="fade-up">
     <div class="col-12">
         <div class="nav nav-tabs flex-column flex-sm-column flex-md-row flex-lg-row flex-xl-row flex-xxl-row flex-nowrap">
-            <a class="flex-fill text-sm-start text-md-center text-lg-center text-xl-center text-xxl-center nav-link text-truncate <?php echo $modo == "item_relacionado" ? "active" : ""; ?>" href="<?php echo $visaoModelo->itemSeleciona()->rotaItemRelacionado; ?>">
+            <a class="flex-fill text-sm-start text-md-center text-lg-center text-xl-center text-xxl-center nav-link text-truncate <?php echo ($modo ?? "padrao") == "item_relacionado" ? "active" : ""; ?>" href="<?php echo $visaoModelo->itemSeleciona()->rotaItemRelacionado; ?>">
                 <?php echo $visaoModelo->textoConteudoSeleciona("navegacao_item_relacionado"); ?>
             </a>
         </div>
