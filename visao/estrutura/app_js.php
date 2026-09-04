@@ -7,8 +7,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- aos js -->
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-
-<?php if ($visaoModelo->dadoSeleciona()->googleServicoExibe): ?>
+<!-- google analytics js -->
+<?php if ($visaoModelo->dadoSeleciona()->googleAnalytics): ?>
     <!-- google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $visaoModelo->dadoSeleciona()->googleAnalyticsId; ?>"></script>
     <script>
@@ -16,9 +16,11 @@
         function gtag() { dataLayer.push(arguments); }
         gtag("js", new Date());
         gtag("config", "<?= $visaoModelo->dadoSeleciona()->googleAnalyticsId; ?>");
+        if (<?= $visaoModelo->dadoSeleciona()->appLogExibe ? 'true' : 'false'; ?>) {
+            console.log("Google Analytics ID: <?= $visaoModelo->dadoSeleciona()->googleAnalyticsId; ?>");
+        }
     </script>
 <?php endif; ?>
-
 <!-- rota js -->
 <script>
     window.App = {

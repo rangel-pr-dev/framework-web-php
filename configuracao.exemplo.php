@@ -13,10 +13,13 @@ return [
     "BD_NOME_EN_US" => "base_dado_en_us",
 
     // Google Services
+    // Google Analytics
     "GOOGLE_ANALYTICS_ID" => "G-XXXXXXXXXX",
+    // Google Ads
     "GOOGLE_AD_CLIENT" => "XXXXXXXXXXXXXXXX",
-    "GOOGLE_AD_SLOT" => "XXXXXXXXXX",
     "APP_ADS_TAG" => "XXXXXXXXXXXXXXXX",
+    // Google Ads
+    "GOOGLE_AD_SLOT" => "XXXXXXXXXX",
 
     // Integração Externa
     "APP_PAYPAL_ID" => "XXXXXXXXXXXXX",

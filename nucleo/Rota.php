@@ -65,7 +65,7 @@ class Rota
         self::ROTA_ADS => [
 
             self::ROTA_METODO => "GET",
-            self::ROTA_URI => '/ads.txt',
+            self::ROTA_URI => '/app-ads.txt',
             self::ROTA_MANIPULADOR => [CApp::class, "appADS"]
         ],
         self::ROTA_ROBOTS => [

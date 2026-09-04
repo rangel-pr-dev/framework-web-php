@@ -1,2 +1,4 @@
-<?php /** @var App\Visao_Modelo\VMBaseGenerico $visaoModelo */
-if ($visaoModelo->dadoSeleciona()->googleAdClient): ?>google.com, pub-<?= str_replace('ca-', '', $visaoModelo->dadoSeleciona()->googleAdClient); ?>, DIRECT, <?= $visaoModelo->dadoSeleciona()->appAdsTag; ?><?php endif; ?>
+<?php
+/** @var App\Visao_Modelo\VMBaseGenerico $visaoModelo */
+?>
+<?php if ($visaoModelo->dadoSeleciona()->googleAd): ?>google.com, pub-<?= $visaoModelo->dadoSeleciona()->googleAdClientId; ?>, DIRECT, <?= $visaoModelo->dadoSeleciona()->googleAdTag; ?><?php endif; ?>

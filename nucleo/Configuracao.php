@@ -28,8 +28,8 @@ class Configuracao
     //
     private const CONFIGURACAO_CHAVE_GOOGLE_ANALYTICS_ID = "GOOGLE_ANALYTICS_ID";
     private const CONFIGURACAO_CHAVE_GOOGLE_AD_CLIENT = "GOOGLE_AD_CLIENT";
-    private const CONFIGURACAO_CHAVE_GOOGLE_AD_SLOT = "GOOGLE_AD_SLOT";
     private const CONFIGURACAO_CHAVE_APP_ADS_TAG = "APP_ADS_TAG";
+    private const CONFIGURACAO_CHAVE_GOOGLE_AD_SLOT = "GOOGLE_AD_SLOT";
 
     //
     private const CONFIGURACAO_CHAVE_APP_PAYPAL_ID = "APP_PAYPAL_ID";
@@ -196,17 +196,17 @@ class Configuracao
     {
         return self::configuracaoValor(self::CONFIGURACAO_CHAVE_GOOGLE_ANALYTICS_ID);
     }
-    public static function googleAdClient(): ?string
+    public static function googleAdClientId(): ?string
     {
         return self::configuracaoValor(self::CONFIGURACAO_CHAVE_GOOGLE_AD_CLIENT);
+    }
+    public static function googleAdTag(): string
+    {
+        return self::configuracaoValor(self::CONFIGURACAO_CHAVE_APP_ADS_TAG);
     }
     public static function googleAdSlot(): ?string
     {
         return self::configuracaoValor(self::CONFIGURACAO_CHAVE_GOOGLE_AD_SLOT);
-    }
-    public static function appAdsTag(): string
-    {
-        return self::configuracaoValor(self::CONFIGURACAO_CHAVE_APP_ADS_TAG);
     }
 
     // Integração Externa

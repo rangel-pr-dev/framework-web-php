@@ -17,7 +17,7 @@ return [
     "p_uso_aceitavel_p6" => "Before publishing a real application, review configuration, permissions, database, forms, external integrations, logs, BFF and institutional policies.",
 
     "p_links_terceiros_titulo" => "Third-party services and dependencies",
-    "p_links_terceiros_p1" => "The README describes configurable integrations such as Google Analytics, Google Ads, ads.txt and PayPal. These resources depend on the environment configuration file and may have their own terms.",
+    "p_links_terceiros_p1" => "The README describes configurable integrations such as Google Analytics, Google Ads, app-ads.txt and PayPal. These resources depend on the environment configuration file and may have their own terms.",
     "p_links_terceiros_p2" => "Libraries, external services, payment providers, analytics, ads, hosting and databases should be evaluated by the final project according to their respective licenses, policies and technical requirements.",
 
     "p_limitacao_responsabilidade_titulo" => "Limitation of liability",

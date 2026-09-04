@@ -12,8 +12,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
 <!--  google ads -->
-<?php if ($visaoModelo->dadoSeleciona()->googleServicoExibe): ?>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<?= $visaoModelo->dadoSeleciona()->googleAdClient; ?>" crossorigin="anonymous"></script>
+<?php if ($visaoModelo->dadoSeleciona()->googleAd): ?>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-<?= $visaoModelo->dadoSeleciona()->googleAdClientId; ?>" crossorigin="anonymous"></script>
+    <script>
+        if (<?= $visaoModelo->dadoSeleciona()->appLogExibe ? 'true' : 'false'; ?>) {
+            console.log("Google Ads ID: <?= $visaoModelo->dadoSeleciona()->googleAdClientId; ?>");
+            console.log("Google Ads TAG: <?= $visaoModelo->dadoSeleciona()->googleAdTag; ?>");
+        }
+    </script>
 <?php endif; ?>
 <!-- principal css -->
 <link rel="stylesheet" href="/css/principal.css">

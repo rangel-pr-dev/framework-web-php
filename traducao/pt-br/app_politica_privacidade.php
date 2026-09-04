@@ -17,7 +17,7 @@ return [
     "p_informacao_protecao_p1" => "O framework separa configuracoes por ambiente, valida chaves obrigatorias, evita expor credenciais nas views, normaliza entradas por DTOs e valida chamadas BFF com codigo de solicitacao. Ainda assim, cada aplicacao final deve revisar permissoes, formularios, logs, banco de dados e integracoes antes de entrar em producao.",
 
     "p_google_analytics_titulo" => "Google Analytics e Google Ads",
-    "p_google_analytics_p1" => "O README descreve chaves opcionais para Google Analytics, Google Ads e ads.txt. Esses servicos so devem ser considerados ativos quando configurados no ambiente e habilitados pela aplicacao.",
+    "p_google_analytics_p1" => "O README descreve chaves opcionais para Google Analytics, Google Ads e app-ads.txt. Esses servicos so devem ser considerados ativos quando configurados no ambiente e habilitados pela aplicacao.",
     "p_google_analytics_p2" => "Quando usados, esses servicos podem tratar dados tecnicos e estatisticos sobre navegacao, desempenho, origem de acesso e interacao com paginas. A configuracao final deve informar o usuario conforme as regras aplicaveis ao projeto.",
     "p_google_analytics_p3" => "<a class='link-info text-decoration-none' target='_blank' href='http://www.google.com/policies/privacy/partners/'>Como o Google usa informacoes de sites ou apps que utilizam seus servicos.</a>",
 

@@ -17,7 +17,7 @@ return [
     "p_uso_aceitavel_p6" => "Antes de publicar uma aplicacao real, revise configuracoes, permissoes, banco de dados, formularios, integracoes externas, logs, BFF e politicas institucionais.",
 
     "p_links_terceiros_titulo" => "Servicos e dependencias de terceiros",
-    "p_links_terceiros_p1" => "O README descreve integracoes configuraveis, como Google Analytics, Google Ads, ads.txt e PayPal. Esses recursos dependem do arquivo de configuracao do ambiente e podem possuir termos proprios.",
+    "p_links_terceiros_p1" => "O README descreve integracoes configuraveis, como Google Analytics, Google Ads, app-ads.txt e PayPal. Esses recursos dependem do arquivo de configuracao do ambiente e podem possuir termos proprios.",
     "p_links_terceiros_p2" => "Bibliotecas, servicos externos, provedores de pagamento, analytics, anuncios, hospedagem e banco de dados devem ser avaliados pelo projeto final conforme suas respectivas licencas, politicas e requisitos tecnicos.",
 
     "p_limitacao_responsabilidade_titulo" => "Limitacao de responsabilidade",

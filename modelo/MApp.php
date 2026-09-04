@@ -77,11 +77,16 @@ class MApp
             $layoutMenuContexto,
 
             // Google Services
+            // Google Analytics
             Configuracao::googleAnalyticsId(),
-            Configuracao::googleAdClient(),
+            (!empty(Configuracao::googleAnalyticsId())),
+            // Google Ads
+            Configuracao::googleAdClientId(),
+            Configuracao::googleAdTag(),
+            (!empty(Configuracao::googleAdClientId()) && !empty(Configuracao::googleAdTag())),
+            // Google Ads
             Configuracao::googleAdSlot(),
-            Configuracao::appAdsTag(),
-            Configuracao::ambienteAtual() === Configuracao::AMBIENTE_PRODUCAO,
+            (!empty(Configuracao::googleAdSlot())),
 
             // Integração Externa
             Configuracao::appPaypalId(),

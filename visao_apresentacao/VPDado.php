@@ -16,11 +16,16 @@ class VPDado
     public bool $layoutMenuContexto;
 
     // Google Services
+    // Google Analytics
     public ?string $googleAnalyticsId;
-    public ?string $googleAdClient;
+    public bool $googleAnalytics;
+    // Google Ads
+    public ?string $googleAdClientId;
+    public ?string $googleAdTag;
+    public bool $googleAd;
+    // Google Ads
     public ?string $googleAdSlot;
-    public string $appAdsTag;
-    public bool $googleServicoExibe;
+    public bool $googleAdBanner;
 
     // Integração Externa
     public ?string $appPaypalId;
@@ -76,11 +81,16 @@ class VPDado
         bool $layoutMenuContexto,
 
         // Google Services
+        // Google Analytics
         ?string $googleAnalyticsId,
-        ?string $googleAdClient,
+        bool $googleAnalytics,
+        // Google Ads
+        ?string $googleAdClientId,
+        ?string $googleAdTag,
+        bool $googleAd,
+        // Google Ads        
         ?string $googleAdSlot,
-        string $appAdsTag,
-        bool $googleServicoExibe,
+        bool $googleAdBanner,
 
         // Integração Externa
         ?string $appPaypalId,
@@ -134,11 +144,16 @@ class VPDado
         $this->layoutMenuContexto = $layoutMenuContexto;
 
         // Google Services
+        // Google Analytics
         $this->googleAnalyticsId = $googleAnalyticsId;
-        $this->googleAdClient = $googleAdClient;
+        $this->googleAnalytics = $googleAnalytics;
+        // Google Ads
+        $this->googleAdClientId = $googleAdClientId;
+        $this->googleAdTag = $googleAdTag;
+        $this->googleAd = $googleAd;
+        // Google Ads
         $this->googleAdSlot = $googleAdSlot;
-        $this->appAdsTag = $appAdsTag;
-        $this->googleServicoExibe = $googleServicoExibe;
+        $this->googleAdBanner = $googleAdBanner;
 
         // Integração Externa
         $this->appPaypalId = $appPaypalId;
@@ -196,11 +211,16 @@ class VPDado
             "layoutMenuContexto" => $this->layoutMenuContexto,
 
             // Google Services
+            // Google Analytics
             "googleAnalyticsId" => $this->googleAnalyticsId,
-            "googleAdClient" => $this->googleAdClient,
+            "googleAnalytics" => $this->googleAnalytics,
+            // Google Ads
+            "googleAdClientId" => $this->googleAdClientId,
+            "googleAdTag" => $this->googleAdTag,
+            "googleAd" => $this->googleAd,
+            // Google Ads
             "googleAdSlot" => $this->googleAdSlot,
-            "appAdsTag" => $this->appAdsTag,
-            "googleServicoExibe" => $this->googleServicoExibe,
+            "googleAdBanner" => $this->googleAdBanner,
 
             // Integração Externa
             "appPaypalId" => $this->appPaypalId,

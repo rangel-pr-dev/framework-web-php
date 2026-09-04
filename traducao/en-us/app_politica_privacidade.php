@@ -17,7 +17,7 @@ return [
     "p_informacao_protecao_p1" => "The framework separates configuration by environment, validates required keys, avoids exposing credentials in views, normalizes input through DTOs and validates BFF calls with a request code. Even so, each final application should review permissions, forms, logs, databases and integrations before production.",
 
     "p_google_analytics_titulo" => "Google Analytics and Google Ads",
-    "p_google_analytics_p1" => "The README describes optional keys for Google Analytics, Google Ads and ads.txt. These services should only be considered active when configured in the environment and enabled by the application.",
+    "p_google_analytics_p1" => "The README describes optional keys for Google Analytics, Google Ads and app-ads.txt. These services should only be considered active when configured in the environment and enabled by the application.",
     "p_google_analytics_p2" => "When used, these services may process technical and statistical data about navigation, performance, traffic source and page interaction. The final configuration should inform users according to the rules applicable to the project.",
     "p_google_analytics_p3" => "<a class='link-info text-decoration-none' target='_blank' href='http://www.google.com/policies/privacy/partners/'>How Google uses information from sites or apps that use its services.</a>",
 
