@@ -144,7 +144,7 @@ CREATE TABLE `tb_item_tipo` (
 
 LOCK TABLES `tb_item_tipo` WRITE;
 /*!40000 ALTER TABLE `tb_item_tipo` DISABLE KEYS */;
-INSERT INTO `tb_item_tipo` VALUES (1,'1','Tipo 1'),(2,'2','Tipo 2'),(3,'3','Tipo 3'),(4,'4','Tipo 4'),(5,'5','Tipo 5');
+INSERT INTO `tb_item_tipo` VALUES (1,'1','Type 1'),(2,'2','Type 2'),(3,'3','Type 3'),(4,'4','Type 4'),(5,'5','Type 5');
 /*!40000 ALTER TABLE `tb_item_tipo` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
