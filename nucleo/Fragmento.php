@@ -11,9 +11,21 @@ class Fragmento
     ];
 
     //
-    public static function fragmentoVisao(string $fragmento): string
+    private static function fragmento(string $fragmento): string
     {
         return self::FRAGMENTO_LISTA[$fragmento]
-            ?? throw new Erro("Fragmento nao encontrado: {$fragmento}");
+            ?? throw new Erro("Fragmento nao encontrada: {$fragmento}");
+    }
+
+    //
+    public static function fragmentoVisao(string $fragmento): string
+    {
+        return self::fragmento($fragmento);
+    }
+
+    //
+    public static function fragmentoTexto(string $fragmento): string
+    {
+        return self::fragmento($fragmento);
     }
 }

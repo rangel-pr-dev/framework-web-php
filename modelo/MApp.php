@@ -7,6 +7,7 @@ use App\Nucleo\Sessao;
 use App\Nucleo\Idioma;
 use App\Nucleo\Tema;
 use App\Nucleo\Pagina;
+use App\Nucleo\Fragmento;
 use App\Nucleo\Apresentacao;
 use App\Nucleo\Rota;
 use App\Nucleo\BFFContrato;
@@ -27,6 +28,11 @@ class MApp
     public function textoPagina(string $pagina): array
     {
         return Traducao::textoVisao(Pagina::paginaTexto($pagina));
+    }
+
+    public function textoFragmento(string $fragmento): array
+    {
+        return Traducao::textoVisao(Fragmento::fragmentoTexto($fragmento));
     }
 
     /**
