@@ -81,12 +81,14 @@
                                                                     <input class="form-check-input" type="checkbox" value="<?php echo $itemQualidade; ?>" name="entrada-item-qualidade-lista" id="entrada-item-qualidade-<?php echo $itemQualidade; ?>">
                                                                 <?php endif; ?>
                                                                 <label class="form-check-label texto-limitado" for="entrada-item-qualidade-<?php echo $itemQualidade; ?>">
-                                                                    <?php echo $itemQualidade; ?>         <?php echo $visaoModelo->textoConteudoSeleciona("filtro_atributo_qualidade_estrelas"); ?>
+                                                                    <?php echo $itemQualidade . " " . $visaoModelo->textoConteudoSeleciona("filtro_atributo_qualidade_estrelas"); ?>
                                                                 </label>
                                                             </div>
                                                         <?php endforeach; ?>
                                                     <?php else: ?>
-                                                        <p class="text-warning small m-0 my-2"><?php echo $visaoModelo->textoConteudoSeleciona("nenhum_registro"); ?></p>
+                                                        <p class="text-warning small m-0 my-2">
+                                                            <?php echo $visaoModelo->textoConteudoSeleciona("nenhum_registro"); ?>
+                                                        </p>
                                                     <?php endif; ?>
                                                     <!-- **** -->
                                                     <button type="submit" class="btn btn-success rounded-pill my-2 w-100">

@@ -11,11 +11,6 @@ class VMItemLista extends VMBasePagina
     //
     protected VMItemListaFragmento $itemListaFragmento;
 
-    private function __construct()
-    {
-
-    }
-
     /**
      * @param VPDado $dado
      * @param ?array $textoConteudo

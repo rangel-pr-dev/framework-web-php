@@ -48,10 +48,12 @@ window.App.bff.processadores = {
 // Mapeamento explícito de campos para seus tipos de processamento
 // IDs ou Names definidos aqui serão tratados pelo processador correspondente
 window.App.bff.mapeamentoTipo = {
+
+    //
+    "entrada-item-nome": "string",
     "entrada-item-tipo-lista": "lista-string",
     "entrada-item-qualidade-lista": "lista-inteiro",
     "entrada-item-lista-deslocamento": "inteiro",
-    "entrada-item-nome": "string"
 };
 
 //

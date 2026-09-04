@@ -6,7 +6,7 @@ return array(
     "sessao_menu_1" => "Menu",
 
     "bt_inicio" => "Home",
-    "bt_item" => "Itens",
+    "bt_item" => "Items",
 
     "sessao_menu_2" => "Another Tools",
 

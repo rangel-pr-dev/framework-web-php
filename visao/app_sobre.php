@@ -8,7 +8,7 @@
         </p>
         <div class="card rounded-5">
             <?php $topicoLista = $visaoModelo->topicoListaSeleciona(); ?>
-            <div class="card-body text-center">
+            <div class="card-body">
                 <p class="m-0">
                     <?php echo $visaoModelo->textoConteudoSeleciona($topicoLista["topico_1"]["titulo"]); ?>
                 </p>
@@ -17,7 +17,7 @@
                 </p>
                 <hr>
                 <div class="row">
-                    <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 col-xxl-2 m-auto">
+                    <div class="col-8 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-2 m-auto">
                         <img class="image-fluid rounded-circle w-100" src="<?php echo $visaoModelo->dadoSeleciona()->logomarca; ?>" alt="<?php echo $visaoModelo->textoNavegacao("titulo"); ?>">
                     </div>
                 </div>
