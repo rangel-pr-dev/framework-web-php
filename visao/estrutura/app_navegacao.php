@@ -9,46 +9,44 @@
         </a>
         <!-- **** -->
         <div class="d-flex align-items-center ms-auto">
-            <ul class="navbar-nav flex-row">
-                <!-- linguagem -->
-                <li class="nav-item dropdown me-2">
-                    <a class="nav-link px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-translate"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end rounded-4 shadow border-0 mt-2">
-                        <li>
-                            <a class="dropdown-item <?php echo ($visaoModelo->dadoSeleciona()->idioma === 'pt-br') ? 'active' : ''; ?>" href="<?php echo $visaoModelo->dadoSeleciona()->rotaLinguagemPortugues; ?>">
-                                <?php echo $visaoModelo->textoMenu("bt_linguagem_portugues"); ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item <?php echo ($visaoModelo->dadoSeleciona()->idioma === 'en-us') ? 'active' : ''; ?>" href="<?php echo $visaoModelo->dadoSeleciona()->rotaLinguagemIngles; ?>">
-                                <?php echo $visaoModelo->textoMenu("bt_linguagem_ingles"); ?>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <!-- tema -->
-                <li class="nav-item dropdown me-2">
-                    <a class="nav-link px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi <?php echo ($visaoModelo->dadoSeleciona()->tema === 'dark') ? 'bi-moon-stars-fill' : 'bi-brightness-high-fill'; ?>"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end rounded-4 shadow border-0 mt-2">
-                        <li>
-                            <a class="dropdown-item <?php echo ($visaoModelo->dadoSeleciona()->tema === 'light') ? 'active' : ''; ?>" href="<?php echo $visaoModelo->dadoSeleciona()->rotaTemaDia; ?>">
-                                <i class="bi bi-brightness-high-fill me-2"></i>
-                                <?php echo $visaoModelo->textoMenu("bt_tema_dia"); ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item <?php echo ($visaoModelo->dadoSeleciona()->tema === 'dark') ? 'active' : ''; ?>" href="<?php echo $visaoModelo->dadoSeleciona()->rotaTemaNoite; ?>">
-                                <i class="bi bi-moon-stars-fill me-2"></i>
-                                <?php echo $visaoModelo->textoMenu("bt_tema_noite"); ?>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+            <!-- linguagem -->
+            <div class="dropdown">
+                <button class="btn nav-link px-2 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-translate"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end rounded-4 shadow border-0 mt-2">
+                    <li>
+                        <a class="dropdown-item <?php echo ($visaoModelo->dadoSeleciona()->idioma === 'pt-br') ? 'active' : ''; ?>" href="<?php echo $visaoModelo->dadoSeleciona()->rotaLinguagemPortugues; ?>">
+                            <?php echo $visaoModelo->textoMenu('bt_linguagem_portugues'); ?>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item <?php echo ($visaoModelo->dadoSeleciona()->idioma === 'en-us') ? 'active' : ''; ?>" href="<?php echo $visaoModelo->dadoSeleciona()->rotaLinguagemIngles; ?>">
+                            <?php echo $visaoModelo->textoMenu('bt_linguagem_ingles'); ?>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- tema -->
+            <div class="dropdown">
+                <button class="btn nav-link px-2 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi <?php echo ($visaoModelo->dadoSeleciona()->tema === 'noite') ? 'bi-moon-stars-fill' : 'bi-brightness-high-fill'; ?>"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end rounded-4 shadow border-0 mt-2">
+                    <li>
+                        <a class="dropdown-item <?php echo ($visaoModelo->dadoSeleciona()->tema === 'dia') ? 'active' : ''; ?>" href="<?php echo $visaoModelo->dadoSeleciona()->rotaTemaDia; ?>">
+                            <i class="bi bi-brightness-high-fill me-2"></i>
+                            <?php echo $visaoModelo->textoMenu('bt_tema_dia'); ?>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item <?php echo ($visaoModelo->dadoSeleciona()->tema === 'noite') ? 'active' : ''; ?>" href="<?php echo $visaoModelo->dadoSeleciona()->rotaTemaNoite; ?>">
+                            <i class="bi bi-moon-stars-fill me-2"></i>
+                            <?php echo $visaoModelo->textoMenu('bt_tema_noite'); ?>
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <!-- menu global (ancora) -->
             <?php if ($visaoModelo->dadoSeleciona()->layoutMenuGlobal): ?>
                 <button class="navbar-toggler border-0 ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#menu-global" aria-controls="menu-global" aria-label="XXXX">
@@ -67,4 +65,3 @@
         <!-- menu contexto suspenso -->
         <?php include "visao/menu/app_menu_contexto_suspenso.php"; ?>
     </div>
-</nav>
