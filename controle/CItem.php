@@ -6,6 +6,8 @@ use App\Nucleo\Pagina;
 use App\Nucleo\Fragmento;
 use App\Nucleo\Renderizacao;
 
+use App\Base_Dado\BDConexao;
+
 use App\Modelo\MApp;
 use App\Modelo\MItem;
 
@@ -54,38 +56,50 @@ class CItem
     public static function itemSeleciona(array $parametroLista = [])
     {
         //
-        $appModelo = new MApp();
-        $itemModelo = new MItem();
+        $bdConexao = BDConexao::bdInstancia();
+        $bdConexao->conexaoInicia();
 
-        // item
-        $item = $itemModelo->itemSeleciona($parametroLista["id_item"]);
-
-        //
-        if ($item) {
-
-            // itemLista
-            $itemLista = $itemModelo->itemRelacionamentoLista($item->idRelacionamento);
+        try {
 
             //
-            $visaoModelo = VMItemSeleciona::sucesso(
+            $appModelo = new MApp();
+            $itemModelo = new MItem();
 
-                $appModelo->dado(true, false, true),
-                $appModelo->textoPagina(Pagina::ITEM_SELECAO),
-                VPItemSelecao::vpItemFabrica($item),
-                VMItemListaFragmento::sucesso(
-                    $appModelo->textoFragmento(Fragmento::ITEM_LISTA),
-                    VPItemLista::vpItemFabricaLista($itemLista)
-                )
-            );
+            // item
+            $item = $itemModelo->itemSeleciona($parametroLista["id_item"]);
 
             //
-            Renderizacao::paginaComLayout(Pagina::ITEM_SELECAO, $visaoModelo);
+            if ($item) {
+
+                // itemLista
+                $itemLista = $itemModelo->itemRelacionamentoLista($item->idRelacionamento);
+
+                //
+                $visaoModelo = VMItemSeleciona::sucesso(
+
+                    $appModelo->dado(true, false, true),
+                    $appModelo->textoPagina(Pagina::ITEM_SELECAO),
+                    VPItemSelecao::vpItemFabrica($item),
+                    VMItemListaFragmento::sucesso(
+                        $appModelo->textoFragmento(Fragmento::ITEM_LISTA),
+                        VPItemLista::vpItemFabricaLista($itemLista)
+                    )
+                );
+
+                //
+                Renderizacao::paginaComLayout(Pagina::ITEM_SELECAO, $visaoModelo);
+            }
+            //
+            else {
+
+                CApp::appErro404();
+                exit;
+            }
         }
         //
-        else {
+        finally {
 
-            CApp::appErro404();
-            exit;
+            $bdConexao->conexaoFinaliza();
         }
     }
 }

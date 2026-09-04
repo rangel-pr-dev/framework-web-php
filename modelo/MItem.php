@@ -12,29 +12,6 @@ use \Throwable;
 
 class MItem
 {
-    //
-    private function executar(
-        callable $procedimento
-    ) {
-        $bdInstancia = BDConexao::bdInstancia();
-        $bdInstancia->bdConexaoInicializa();
-
-        try {
-
-            return $procedimento($bdInstancia->bdConexaoObtem());
-        }
-        //
-        catch (Throwable $e) {
-
-            throw new Erro($e->getMessage());
-        }
-        //
-        finally {
-
-            $bdInstancia->bdConexaoFinaliza();
-        }
-    }
-
     /**
      * @param ?string $nome
      * @param ?string[] $idTipoLista
@@ -50,7 +27,7 @@ class MItem
         $deslocamento,
         $limite
     ) {
-        return $this->executar(function ($bdConexao) use ($nome, $idTipoLista, $qualidadeLista, $deslocamento, $limite) {
+        return BDConexao::bdInstancia()->executar(function ($bdConexao) use ($nome, $idTipoLista, $qualidadeLista, $deslocamento, $limite) {
 
             $itemLista = [];
 
@@ -123,7 +100,7 @@ class MItem
      */
     public function itemLista()
     {
-        return $this->executar(function ($bdConexao) {
+        return BDConexao::bdInstancia()->executar(function ($bdConexao) {
 
             $itemLista = [];
             $requisicao = $bdConexao->prepare(
@@ -160,7 +137,7 @@ class MItem
      */
     public function itemNomeLista()
     {
-        return $this->executar(function ($bdConexao) {
+        return BDConexao::bdInstancia()->executar(function ($bdConexao) {
 
             $itemNomeLista = [];
             $requisicao = $bdConexao->prepare(
@@ -191,7 +168,7 @@ class MItem
      */
     public function itemTipoLista()
     {
-        return $this->executar(function ($bdConexao) {
+        return BDConexao::bdInstancia()->executar(function ($bdConexao) {
 
             $itemTipoLista = [];
             $requisicao = $bdConexao->prepare(
@@ -224,7 +201,7 @@ class MItem
      */
     public function itemSeleciona($idItem)
     {
-        return $this->executar(function ($bdConexao) use ($idItem) {
+        return BDConexao::bdInstancia()->executar(function ($bdConexao) use ($idItem) {
             $item = null;
             $requisicao = $bdConexao->prepare(
                 "SELECT 
@@ -271,7 +248,7 @@ class MItem
      */
     public function itemRelacionamentoLista($idRelacionamento)
     {
-        return $this->executar(function ($bdConexao) use ($idRelacionamento) {
+        return BDConexao::bdInstancia()->executar(function ($bdConexao) use ($idRelacionamento) {
 
             $itemLista = [];
             $requisicao = $bdConexao->prepare(
