@@ -2,6 +2,7 @@
 namespace App\Controle;
 
 use App\Nucleo\Pagina;
+use App\Nucleo\Fragmento;
 use App\Nucleo\Renderizacao;
 
 use App\Modelo\MApp;
@@ -46,8 +47,14 @@ class CInicio
         $visaoModelo = VMInicio::sucesso(
             $appModelo->dado(true, false, true),
             $appModelo->textoPagina(Pagina::APP_INICIO),
-            new VMItemListaFragmento(VPItemLista::vpItemFabricaLista($itemLista1)),
-            new VMItemListaFragmento(VPItemLista::vpItemFabricaLista($itemLista2)),
+            VMItemListaFragmento::sucesso(
+                $appModelo->textoFragmento(Fragmento::ITEM_LISTA),
+                VPItemLista::vpItemFabricaLista($itemLista1)
+            ),
+            VMItemListaFragmento::sucesso(
+                $appModelo->textoFragmento(Fragmento::ITEM_LISTA),
+                VPItemLista::vpItemFabricaLista($itemLista2)
+            ),
         );
 
         Renderizacao::paginaComLayout(Pagina::APP_INICIO, $visaoModelo);

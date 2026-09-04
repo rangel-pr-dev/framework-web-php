@@ -10,12 +10,23 @@ class VMItemListaFragmento extends VMBaseFragmento
     protected array $itemLista = [];
 
     /**
+     * @param ?array $textoConteudo
      * @param VPItemLista[] $itemLista
+     * @return self
      */
-    public function __construct(
+    public static function sucesso(
+
+        ?array $textoConteudo,
         array $itemLista
-    ) {
-        $this->itemLista = $itemLista;
+
+    ): self {
+
+        $visaoModeloFragmento = new self();
+
+        $visaoModeloFragmento->textoConteudo = $textoConteudo;
+        $visaoModeloFragmento->itemLista = $itemLista;
+
+        return $visaoModeloFragmento;
     }
 
     //

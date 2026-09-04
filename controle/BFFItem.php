@@ -9,6 +9,7 @@ use App\Nucleo\Rota;
 use App\Nucleo\BFF;
 use App\Nucleo\Renderizacao;
 
+use App\Modelo\MApp;
 use App\Modelo\MItem;
 
 use App\Visao_Apresentacao\VPItemLista;
@@ -48,6 +49,9 @@ class BFFItem
         try {
 
             //
+            $appModelo = new MApp();
+
+            //
             $itemModelo = new MItem();
 
             // itemLista
@@ -70,7 +74,10 @@ class BFFItem
             $itemFiltro->entradaItemListaDeslocamento += count($itemLista);
 
             //
-            $visaoModeloFragmento = new VMItemListaFragmento(VPItemLista::vpItemFabricaLista($itemLista));
+            $visaoModeloFragmento = VMItemListaFragmento::sucesso(
+                $appModelo->textoFragmento(Fragmento::ITEM_LISTA),
+                VPItemLista::vpItemFabricaLista($itemLista)
+            );
 
             //
             BFF::bffRespostaSucesso((new DTOBFFRespostaPaginacao(

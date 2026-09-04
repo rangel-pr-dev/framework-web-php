@@ -3,8 +3,8 @@ namespace App\Controle;
 
 use App\Nucleo\Configuracao;
 use App\Nucleo\Pagina;
+use App\Nucleo\Fragmento;
 use App\Nucleo\Renderizacao;
-use App\Controle\BFFContratoItem;
 
 use App\Modelo\MApp;
 use App\Modelo\MItem;
@@ -42,7 +42,10 @@ class CItem
             $appModelo->dado(true, false, true, BFFContratoItem::dado()),
             $appModelo->textoPagina(Pagina::ITEM_LISTA),
             new VMItemListaFiltro($itemFiltro),
-            new VMItemListaFragmento(VPItemLista::vpItemFabricaLista($itemLista)),
+            VMItemListaFragmento::sucesso(
+                $appModelo->textoFragmento(Fragmento::ITEM_LISTA),
+                VPItemLista::vpItemFabricaLista($itemLista)
+            ),
         );
 
         Renderizacao::paginaComLayout(Pagina::ITEM_LISTA, $visaoModelo);
@@ -50,6 +53,7 @@ class CItem
 
     public static function itemSeleciona(array $parametroLista = [])
     {
+        //
         $appModelo = new MApp();
         $itemModelo = new MItem();
 
@@ -68,7 +72,10 @@ class CItem
                 $appModelo->dado(true, false, true),
                 $appModelo->textoPagina(Pagina::ITEM_SELECAO),
                 VPItemSelecao::vpItemFabrica($item),
-                new VMItemListaFragmento(VPItemLista::vpItemFabricaLista($itemLista)),
+                VMItemListaFragmento::sucesso(
+                    $appModelo->textoFragmento(Fragmento::ITEM_LISTA),
+                    VPItemLista::vpItemFabricaLista($itemLista)
+                )
             );
 
             //
