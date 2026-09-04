@@ -59,7 +59,7 @@ Antes de instalar, confirme que o ambiente possui:
 4. Copie `configuracao.exemplo.php` para `configuracao.{ambiente}.php`.
 5. Ajuste credenciais, dominio, Google Services, PayPal e demais configuracoes nesse arquivo.
 6. Importe `base_dado/sql/bd_framework.sql` no MySQL/MariaDB.
-7. Acesse a raiz da aplicacao. A rota `/` redireciona para o idioma ativo da sessao.
+7. Acesse a raiz da aplicacao. A rota `/` redireciona para o idioma padrao.
 
 ## Configuracao de Ambiente
 
@@ -89,7 +89,7 @@ Use `configuracao.exemplo.php` como base. As chaves esperadas sao:
 - `GOOGLE_ANALYTICS_ID`: identificador do Google Analytics.
 - `GOOGLE_AD_CLIENT`: cliente do Google AdSense.
 - `GOOGLE_AD_SLOT`: slot de anuncio.
-- `APP_ADS_TAG`: conteudo usado em `ads.txt`.
+- `APP_ADS_TAG`: conteudo usado em `app-ads.txt`.
 - `APP_PAYPAL_ID`: identificador de integracao PayPal.
 
 Em desenvolvimento, valores de servicos externos podem ficar como placeholders, desde que as chaves existam no array. `Configuracao::configuracaoValida()` exige todas as chaves obrigatorias.
@@ -116,6 +116,11 @@ O framework escolhe a base pelo idioma ativo em `Contexto`:
 
 - `pt-br` usa `Configuracao::bdUsuarioPTBR()` e `Configuracao::bdNomePTBR()`.
 - `en-us` usa `Configuracao::bdUsuarioENUS()` e `Configuracao::bdNomeENUS()`.
+
+`BDConexao` pode ser usado de duas formas:
+
+- Operacoes simples usam `BDConexao::bdInstancia()->executar(...)`, que abre a conexao, executa o callback e fecha a conexao automaticamente.
+- Fluxos com varias consultas relacionadas podem usar `conexaoInicia()` e `conexaoFinaliza()` no controller. Enquanto a conexao estiver aberta, chamadas de modelo que usam `executar(...)` reaproveitam a conexao ativa.
 
 As tabelas principais do exemplo sao:
 
@@ -146,7 +151,7 @@ As tabelas principais do exemplo sao:
 3. `App\Nucleo\Aplicacao::executa()` inicia sessao, token BFF, tema e roteamento.
 4. `Aplicacao::urlSolicitada()` normaliza a URI, inclusive em subdiretorios.
 5. `Roteamento::rotaExecuta()` encontra a rota em `Rota::ROTA_LISTA`.
-6. O idioma da URL ou da sessao atualiza `Sessao` e `Contexto`.
+6. O idioma da URL define `Contexto` e atualiza `Sessao` apenas quando o idioma veio explicitamente da URL; sem idioma na URL, `Contexto` usa sessao ou idioma padrao.
 7. O controller valida entradas, chama modelos/servicos e monta o ViewModel.
 8. `Renderizacao` renderiza uma pagina com layout, sem layout ou um fragmento.
 9. Em endpoints BFF, `BFF` valida JSON/token e responde em JSON.
@@ -163,6 +168,7 @@ Classe de bootstrap da aplicacao.
 - `roteamento()`: registra em `Roteamento` todas as rotas declaradas em `Rota::ROTA_LISTA`.
 - `urlSolicitada()`: resolve a URI atual, removendo subdiretorios quando necessario.
 - `trataErro(Throwable $e, string $url)`: decide entre erro HTML e erro JSON para BFF.
+- `solicitacaoBff(string $url)`: identifica endpoints BFF com ou sem prefixo de idioma.
 
 #### `Inclusao`
 
@@ -182,7 +188,7 @@ Centraliza ambiente e variaveis de configuracao.
 - `ambienteSeleciona()`: le e valida `APP_AMBIENTE`.
 - `ambienteAtual()`: retorna o ambiente atual ou `AMBIENTE_INDEFINIDO` quando nao configurado.
 - `appEmail()`, `bdServidor()`, `bdUsuarioPTBR()`, `bdUsuarioENUS()`, `bdSenha()`, `bdNomePTBR()`, `bdNomeENUS()`: acessores de configuracao da aplicacao e banco.
-- `googleAnalyticsId()`, `googleAdClient()`, `googleAdSlot()`, `appAdsTag()`, `appPaypalId()`: acessores de integracoes externas.
+- `googleAnalyticsId()`, `googleAdClientId()`, `googleAdTag()`, `googleAdSlot()`, `appPaypalId()`: acessores de integracoes externas.
 
 #### `Erro`
 
@@ -232,7 +238,7 @@ Fonte unica de verdade das URLs.
 - Constantes `PARAMETRO_*`: nomes de parametros de rota ou filtro.
 - `ROTA_LISTA`: mapa com metodo HTTP, URI e manipulador.
 - `rotaUrl(string $rota, array $parametros = [], array $filtros = [], ?string $idioma = null)`: gera URL para rota nomeada.
-- `rotaInicio()`, `rotaSobre()`, `rotaItens()`, `rotaItem(string $idItem)`: atalhos para rotas usadas nas views.
+- `rotaInicio()`, `rotaInicioPadrao()`, `rotaSobre()`, `rotaItens()`, `rotaItem(string $idItem)`: atalhos para rotas usadas nas views.
 - `rotaItensFiltro(...)`: monta URL amigavel com query string de filtros.
 - `rotaItensFiltroBFF()` e `rotaItensPaginacaoBFF()`: URLs dos endpoints assincronos.
 
@@ -243,7 +249,8 @@ Executa o despacho das rotas.
 - `rotaRegistra(string $metodo, string $uri, array $manipulador)`: registra uma rota.
 - `rotaExecuta(string $url, string $metodo)`: encontra a rota, extrai parametros e chama o controller.
 - `rotaMetodoPermitido(string $url, string $metodoAtual)`: identifica metodos alternativos para responder 405.
-- Atualiza idioma de `Sessao` e `Contexto` antes de chamar o controller.
+- Extrai o idioma do inicio da URL para manter `Contexto` correto antes de chamar o controller.
+- Atualiza `Sessao` somente quando a URL contem idioma suportado, evitando que rotas neutras como `/` herdem estado de outra aba.
 
 #### `Pagina`
 
@@ -260,13 +267,14 @@ Fonte unica de verdade dos fragmentos renderizaveis.
 
 - Constantes de fragmento, como `ITEM_LISTA`.
 - `fragmentoVisao(string $fragmento)`: resolve o arquivo em `visao/` usado por renderizacao parcial.
+- `fragmentoTexto(string $fragmento)`: resolve o arquivo equivalente em `traducao/{idioma}/`.
 
 #### `Renderizacao`
 
 Motor de templates.
 
 - `paginaComLayout(string $pagina, VMBase $visaoModelo)`: renderiza uma pagina dentro de `visao/estrutura/app.php`.
-- `paginaSemLayout(string $pagina, VMBase $visaoModelo)`: renderiza arquivos tecnicos, como `robots.txt`, `ads.txt` ou sitemap.
+- `paginaSemLayout(string $pagina, VMBase $visaoModelo)`: renderiza arquivos tecnicos, como `robots.txt`, `app-ads.txt` ou sitemap.
 - `fragmento(string $fragmento, VMBase $visaoModeloFragmento)`: renderiza HTML parcial com output buffering.
 
 #### `BFF`
@@ -274,7 +282,8 @@ Motor de templates.
 Base para endpoints Backend for Frontend.
 
 - `bffEntrada()`: le JSON bruto do corpo da requisicao.
-- `bffEntradaValida()`: valida JSON, token de sessao e idioma.
+- `bffEntradaValida()`: valida JSON e token de sessao.
+- O idioma dos endpoints BFF deve vir do `Contexto` preparado pelo roteamento, inclusive em rotas `/{idioma}/bff/...`.
 - `bffRespostaSucesso(array $dado = [], ?string $mensagem = "Sucesso")`: responde JSON 200.
 - `bffRespostaRequisicaoInvalida()`, `bffRespostaProibida()`, `bffRespostaErroInterno()`: respostas padronizadas.
 
@@ -309,9 +318,9 @@ Utilitario de apresentacao e performance.
 
 Controller de rotas globais e tecnicas.
 
-- `appRaiz()`: redireciona `/` para o idioma da sessao.
+- `appRaiz()`: redireciona `/` para `Rota::rotaInicioPadrao()`.
 - `appErro404()`, `appErro405(array $metodoPermitidoLista = [])`, `appErro500(...)`: renderizam paginas de erro.
-- `appADS()`: renderiza `ads.txt`.
+- `appADS()`: renderiza `app-ads.txt`.
 - `appRobots()`: renderiza `robots.txt`.
 - `appMapeamento()`: gera sitemap XML com rotas estaticas e itens.
 - `appConfigura()`: atualiza idioma e tema via query string.
@@ -333,6 +342,7 @@ Controller web da entidade de exemplo `Item`.
 - `itemSeleciona($parametroLista)`: recebe `{id_item}`, consulta item e relacionados, monta `VMItemSeleciona` e renderiza `Pagina::ITEM_SELECAO`.
 - Usa `DTOItemFiltro` para normalizar filtros.
 - Usa `VPItemLista` e `VPItemSelecao` para adaptar entidades de banco para a view.
+- Em fluxos com varias consultas, como `itemSeleciona()`, pode manter a conexao aberta com `BDConexao::conexaoInicia()` e fecha-la em `finally` com `conexaoFinaliza()`.
 
 #### `BFFItem`
 
@@ -400,7 +410,8 @@ Modelo de dados globais da aplicacao.
 
 - `textoEstrutura(string $textoEstrutura)`: carrega textos globais.
 - `textoPagina(string $pagina)`: carrega textos de uma pagina.
-- `dado(bool $layoutFluido = true)`: monta `VPDado` com ambiente, idioma, tema, rotas, tokens, textos e flags.
+- `textoFragmento(string $fragmento)`: carrega textos de um fragmento.
+- `dado(bool $layoutFluido = true, bool $layoutMenuGlobal = false, bool $layoutMenuContexto = false, array $contratoBFFAdicional = [])`: monta `VPDado` com ambiente, idioma, tema, rotas, tokens, textos, contratos e flags.
 - `urlBase()`: calcula a URL absoluta considerando protocolo, host e subdiretorio.
 
 #### `MItem`
@@ -413,7 +424,7 @@ Modelo da entidade de exemplo `Item`.
 - `itemTipoLista()`: lista tipos de item.
 - `itemSeleciona($idItem)`: busca um item e seu tipo.
 - `itemRelacionamentoLista($idRelacionamento)`: busca itens relacionados.
-- `executar(callable $procedimento)`: abre e fecha conexao, tratando erros de banco.
+- Usa `BDConexao::bdInstancia()->executar(...)` para abrir e fechar conexao automaticamente quando nao houver conexao ativa.
 
 ### Base de Dados (`App\Base_Dado`)
 
@@ -422,11 +433,13 @@ Modelo da entidade de exemplo `Item`.
 Gerencia a conexao com o banco.
 
 - `bdInstancia()`: retorna a instancia compartilhada da conexao.
-- `bdConexaoInicializa()`: abre conexao `mysqli`.
-- `bdConexaoObtem()`: retorna a conexao ativa.
-- `bdConexaoFinaliza()`: encerra a conexao aberta.
+- `conexaoInicia()`: abre conexao manualmente para fluxos que precisam reaproveita-la em varias chamadas de modelo.
+- `conexaoFinaliza()`: encerra a conexao manual aberta.
+- `executar(callable $procedimento)`: executa um callback com `mysqli`; abre e fecha automaticamente quando nao existir conexao ativa.
+- `executarTransacao(callable $procedimento)`: executa um callback dentro de transacao, com commit em sucesso e rollback em erro.
 - Usa configuracoes do ambiente atual e seleciona usuario/base conforme o idioma em `Contexto`.
 - E consumida pelos modelos.
+- Nao deve ser serializada, desserializada ou clonada.
 
 #### Entidades em `base_dado/entidade/`
 
@@ -482,12 +495,13 @@ ViewModel de paginas de erro.
 ViewModel para paginas tecnicas ou simples.
 
 - `sucesso(VPDado $dado, ?array $textoConteudo)`: fabrica uma instancia com dados globais e textos da pagina.
-- Usado em `ads.txt`, `robots.txt` e telas sem dados complexos.
+- Usado em `app-ads.txt`, `robots.txt` e telas sem dados complexos.
 
 #### `VMBaseFragmento`
 
 Base para fragmentos renderizados sem layout.
 
+- `textoConteudoSeleciona(string $chave)`: le textos especificos do fragmento.
 - Usado pelo BFF para retornar HTML parcial.
 
 #### `VMMapeamento`
@@ -541,10 +555,12 @@ Transporta todos os dados globais necessarios para views e JavaScript:
 **Google Services:**
 
 - `googleAnalyticsId`: ID do Google Analytics (nullable).
-- `googleAdClient`: cliente Google AdSense (nullable).
+- `googleAnalytics`: flag para renderizar Google Analytics.
+- `googleAdClientId`: cliente Google AdSense (nullable).
+- `googleAdTag`: conteudo de app-ads.txt.
+- `googleAd`: flag para renderizar scripts/estrutura do Google Ads.
 - `googleAdSlot`: slot Google AdSense (nullable).
-- `appAdsTag`: conteudo de ads.txt.
-- `googleServicoExibe`: flag para renderizar blocos de anuncio.
+- `googleAdBanner`: flag para renderizar blocos de anuncio.
 
 **Integracao Externa:**
 
@@ -677,7 +693,7 @@ public static function rotaGaleria(): string
 ### Rotas principais atuais
 
 - `ROTA_RAIZ`: `/`
-- `ROTA_ADS`: `/ads.txt`
+- `ROTA_ADS`: `/app-ads.txt`
 - `ROTA_ROBOTS`: `/robots.txt`
 - `ROTA_MAPEAMENTO`: `/{idioma}/mapa_do_site`
 - `ROTA_CONFIGURA`: `/configura`
@@ -689,12 +705,16 @@ public static function rotaGaleria(): string
 - `ROTA_ITEMS`: `/{idioma}/itens`
 - `ROTA_ITEM`: `/{idioma}/item/{id_item}`
 - `ROTA_ITEM_RELACIONADOS`: `/{idioma}/item/{id_item}/relacionados`
-- `ROTA_ITEMS_FILTRO`: `/bff/itens/filtro`
-- `ROTA_ITEMS_PAGINACAO`: `/bff/itens/paginacao`
+- `ROTA_ITEMS_FILTRO`: `/{idioma}/bff/itens/filtro`
+- `ROTA_ITEMS_PAGINACAO`: `/{idioma}/bff/itens/paginacao`
+
+`ROTA_RAIZ` e `Rota::rotaRaiz()` representam sempre a raiz neutra `/`. A entrada real da aplicacao com idioma e `ROTA_INICIO` (`/{idioma}`); para redirecionar a raiz ao idioma padrao, use `Rota::rotaInicioPadrao()`.
 
 ## BFF e JavaScript
 
 O BFF serve para fluxos assincronos da interface sem quebrar os contratos do backend.
+
+Endpoints BFF devem ser gerados por `Rota` e, por padrao, tambem recebem o prefixo de idioma. Isso garante que fragmentos renderizados por `Renderizacao::fragmento()` usem os textos do mesmo idioma da pagina que iniciou a chamada. Em erros internos, `Aplicacao::trataErro()` reconhece tanto o formato antigo `bff/...` quanto o formato atual `/{idioma}/bff/...` para responder JSON.
 
 ### Fluxo de filtro
 
@@ -702,7 +722,7 @@ O BFF serve para fluxos assincronos da interface sem quebrar os contratos do bac
 2. `js/principal.js` coleta os campos e inclui o token `appCodigoSolicitacao`.
 3. O endpoint BFF chama `BFF::bffEntradaValida()`.
 4. O DTO normaliza os dados.
-5. O BFF retorna uma localizacao.
+5. O BFF retorna uma localizacao gerada por `Rota`.
 6. O navegador redireciona para a URL amigavel gerada por `Rota`.
 
 ### Fluxo de paginacao
@@ -710,7 +730,7 @@ O BFF serve para fluxos assincronos da interface sem quebrar os contratos do bac
 1. A view envia filtros atuais e deslocamento.
 2. O BFF valida token e entrada.
 3. O modelo busca o proximo lote.
-4. O controller monta um ViewModel de fragmento.
+4. O controller monta um ViewModel de fragmento com dados e textos traduzidos.
 5. `Renderizacao::fragmento()` gera HTML parcial.
 6. O JSON retorna HTML e novo deslocamento.
 7. O JavaScript adiciona o HTML ao container.
@@ -728,7 +748,7 @@ O modulo `Item` demonstra o fluxo completo do framework.
 - ViewModels: `VMItemLista`, `VMItemListaFiltro`, `VMItemListaFragmento`, `VMItemSeleciona`.
 - Views: `visao/item/l_item.php` (listagem), `visao/item/s_item.php` (detalhe), `visao/item/item.php` (card), `visao/item/lb_item.php` (fragmento), `visao/item/item_relacionado.php` (relacionados).
 - Rotas: `ROTA_ITEMS`, `ROTA_ITEM`, `ROTA_ITEM_RELACIONADOS`, `ROTA_ITEMS_FILTRO`, `ROTA_ITEMS_PAGINACAO`.
-- Textos: `traducao/{idioma}/item/l_item.php` e `traducao/{idioma}/item/s_item.php`.
+- Textos: `traducao/{idioma}/item/l_item.php`, `traducao/{idioma}/item/s_item.php` e `traducao/{idioma}/item/lb_item.php`.
 
 ## Guia: Criando um Novo Modulo
 
@@ -746,10 +766,12 @@ Crie `modelo/MProduto.php`.
 
 Responsabilidades comuns:
 
-- abrir e fechar conexao via `BDConexao`;
+- executar consultas por `BDConexao::bdInstancia()->executar(...)`;
 - consultar listas, detalhes e relacionamentos;
 - aplicar filtros de banco;
 - retornar entidades ou arrays tipados.
+
+Quando um controller precisar chamar varias consultas em sequencia, ele pode abrir a conexao antes do fluxo com `BDConexao::bdInstancia()->conexaoInicia()` e fecha-la em `finally` com `conexaoFinaliza()`. As chamadas do modelo que usam `executar(...)` reaproveitam essa conexao ativa.
 
 ### 3. DTOs de entrada
 
@@ -827,7 +849,10 @@ $visaoModelo = VMProdutoLista::sucesso(
     $appModelo->dado(),
     $appModelo->textoPagina(Pagina::PRODUTO_LISTA),
     new VMProdutoListaFiltro($filtro),
-    new VMProdutoListaFragmento(VPProdutoLista::vpProdutoFabricaLista($produtoLista)),
+    VMProdutoListaFragmento::sucesso(
+        $appModelo->textoFragmento(Fragmento::PRODUTO_LISTA),
+        VPProdutoLista::vpProdutoFabricaLista($produtoLista)
+    ),
 );
 
 Renderizacao::paginaComLayout(Pagina::PRODUTO_LISTA, $visaoModelo);
