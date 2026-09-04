@@ -130,13 +130,13 @@ class Rota
         self::ROTA_ITEMS_FILTRO => [
 
             self::ROTA_METODO => "POST",
-            self::ROTA_URI => "/" . self::ROTA_BFF . "/itens/" . self::ROTA_FILTRO,
+            self::ROTA_URI => "/{" . self::PARAMETRO_IDIOMA . "}/" . self::ROTA_BFF . "/itens/" . self::ROTA_FILTRO,
             self::ROTA_MANIPULADOR => [BFFItem::class, "itemListaFiltro"]
         ],
         self::ROTA_ITEMS_PAGINACAO => [
 
             self::ROTA_METODO => "POST",
-            self::ROTA_URI => "/" . self::ROTA_BFF . "/itens/" . self::ROTA_PAGINACAO,
+            self::ROTA_URI => "/{" . self::PARAMETRO_IDIOMA . "}/" . self::ROTA_BFF . "/itens/" . self::ROTA_PAGINACAO,
             self::ROTA_MANIPULADOR => [BFFItem::class, "itemListaPaginacao"]
         ],
         self::ROTA_ITEM => [
@@ -242,6 +242,11 @@ class Rota
     public static function rotaInicio(): string
     {
         return self::rotaUrl(self::ROTA_INICIO);
+    }
+
+    public static function rotaInicioPadrao(): string
+    {
+        return self::rotaUrl(self::ROTA_INICIO, [], [], Idioma::idiomaPadrao());
     }
 
     public static function rotaSobre(): string

@@ -102,7 +102,10 @@ class Aplicacao
 
     private static function solicitacaoBff(string $url): bool
     {
-        return str_starts_with(trim($url, "/"), Rota::ROTA_BFF . "/");
+        $url = trim($url, "/");
+
+        return str_starts_with($url, Rota::ROTA_BFF . "/")
+            || preg_match("/^[a-z]{2}-[a-z]{2}\/" . Rota::ROTA_BFF . "\//", $url) === 1;
     }
 
     private static function erroMensagem(

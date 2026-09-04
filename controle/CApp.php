@@ -25,7 +25,7 @@ class CApp
     //
     public static function appRaiz()
     {
-        header("Location: " . Rota::rotaInicio(), true, 302);
+        header("Location: " . Rota::rotaInicioPadrao(), true, 302);
         exit;
     }
 

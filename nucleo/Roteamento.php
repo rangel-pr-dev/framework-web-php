@@ -54,6 +54,15 @@ class Roteamento
         CApp::appErro405($metodoPermitidoLista);
     }
 
+    private function idiomaExtraiDaUrl(string $url): ?string
+    {
+        if (preg_match("/^([a-z]{2}-[a-z]{2})(?:\/|$)/", $url, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
     //
     public function rotaRegistra(
         string $metodo,
@@ -76,19 +85,15 @@ class Roteamento
 
         $url = trim($url, "/");
 
-        // Extrai o idioma da URL no início para garantir que o contexto esteja correto para páginas de erro (404/405)
-        $idiomaDaUrl = null;
-        if (preg_match("/^([a-z]{2}-[a-z]{2})\//", $url, $matches)) {
-            $idiomaDaUrl = $matches[1];
-        }
+        $idiomaDaUrl = $this->idiomaExtraiDaUrl($url);
 
         $idiomaParaContexto = Idioma::idiomaValidoOuPadrao($idiomaDaUrl ?? Sessao::idiomaSeleciona());
 
-        // Atualiza a sessão e o contexto com o idioma da URL ou o padrão/sessão
-        Sessao::idiomaAtualiza($idiomaParaContexto);
         Contexto::idiomaAtualiza($idiomaParaContexto);
 
-        // Se o idioma extraído não for suportado, Idioma::idiomaValidoOuPadrao já retornará o padrão.
+        if ($idiomaDaUrl !== null && Idioma::idiomaSuportado($idiomaDaUrl)) {
+            Sessao::idiomaAtualiza($idiomaDaUrl);
+        }
 
         foreach ($this->rotas[$metodo] ?? [] as $rota) {
 

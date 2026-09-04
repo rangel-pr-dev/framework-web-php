@@ -42,8 +42,6 @@ class BFF
             self::bffRespostaProibida("Falha");
         }
 
-        self::bffIdiomaAtualiza();
-
         return $entradaDado;
     }
 
@@ -56,7 +54,7 @@ class BFF
     //
     public static function bffIdiomaAtualiza(): void
     {
-        $idioma = Sessao::idiomaSeleciona() ?? $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? Idioma::idiomaPadrao();
+        $idioma = Contexto::idiomaSeleciona();
         $idioma = explode(",", $idioma)[0];
         $idioma = explode(";", $idioma)[0];
         $idioma = strtolower(trim($idioma));
