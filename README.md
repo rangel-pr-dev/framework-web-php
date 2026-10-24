@@ -17,8 +17,13 @@ O projeto evita automacao "magica" e prefere contratos claros. Cada rota, pagina
 - [Documentacao das Classes Principais](#documentacao-das-classes-principais)
 - [Rotas e Paginas](#rotas-e-paginas)
 - [BFF e JavaScript](#bff-e-javascript)
-- [Guias de Desenvolvimento](#guia-criando-um-novo-modulo)
+- [Modulo de Exemplo: Item](#modulo-de-exemplo-item)
+- [Guias de Desenvolvimento](#guias-de-desenvolvimento)
+  - [Criando um Novo Modulo](#guia-criando-um-novo-modulo)
+  - [Criando uma Nova Pagina Simples](#guia-criando-uma-nova-pagina-simples)
+  - [Adicionando um Novo Idioma](#guia-adicionando-um-novo-idioma)
 - [Convencoes de Nome](#convencoes-de-nome)
+- [Padroes de Desenvolvimento](#padroes-de-desenvolvimento)
 - [Troubleshooting](#troubleshooting)
 - [Checklist para Novo Modulo](#checklist-para-novo-modulo)
 
@@ -48,37 +53,38 @@ Antes de instalar, confirme que o ambiente possui:
 - Extensao `fileinfo` habilitada, usada por `Apresentacao::imagemUri()`.
 - MySQL 8.x ou MariaDB compativel.
 - Apache com reescrita de URL ativa, ou servidor equivalente configurado para entregar requisicoes ao `index.php`.
-- Permissao de leitura para `configuracao.{ambiente}.php`, `traducao/`, `visao/` e `recurso/`.
+- Permissao de leitura para `configuracao.php`, `traducao/`, `visao/` e `recurso/`.
 - Permissao de sessao PHP funcionando no servidor.
 
 ## Instalacao
 
 1. Clone o projeto no servidor local.
 2. Configure o servidor para direcionar as requisicoes para `index.php`.
-3. Defina a variavel de ambiente `APP_AMBIENTE`, por exemplo `local` ou `producao`.
-4. Copie `configuracao.exemplo.php` para `configuracao.{ambiente}.php`.
-5. Ajuste credenciais, dominio, Google Services, PayPal e demais configuracoes nesse arquivo.
-6. Importe `base_dado/sql/bd_framework.sql` no MySQL/MariaDB.
-7. Acesse a raiz da aplicacao. A rota `/` redireciona para o idioma padrao.
+3. Copie `configuracao.exemplo.php` para `configuracao.php`.
+4. Defina a chave `APP_AMBIENTE` (`local` ou `producao`) e ajuste credenciais, dominio, Google Services, PayPal e demais configuracoes nesse arquivo.
+5. Importe `base_dado/sql/bd_framework.sql` no MySQL/MariaDB.
+6. Acesse a raiz da aplicacao. A rota `/` redireciona para o idioma padrao.
 
 ## Configuracao de Ambiente
 
-O arquivo de configuracao e escolhido pelo valor de `APP_AMBIENTE`.
+O framework carrega suas definicoes a partir do arquivo unico `configuracao.php` na raiz do projeto. O ambiente e definido diretamente dentro do array de configuracao atraves da chave `APP_AMBIENTE`.
 
-Exemplo:
+Exemplo em `configuracao.php`:
 
-```text
-APP_AMBIENTE=local
-```
+```php
+return [
+    // Ambiente: "local" ou "producao"
+    "APP_AMBIENTE" => "local",
 
-Com esse valor, o framework tenta carregar:
-
-```text
-configuracao.local.php
+    // Informacoes
+    "APP_EMAIL" => "contato@seu-dominio.com",
+    // ...
+];
 ```
 
 Use `configuracao.exemplo.php` como base. As chaves esperadas sao:
 
+- `APP_AMBIENTE`: ambiente da aplicacao (`local` ou `producao`).
 - `APP_EMAIL`: email institucional usado pela aplicacao.
 - `BD_SERVIDOR`: host do MySQL/MariaDB.
 - `BD_USUARIO_PT_BR`: usuario do banco em portugues.
@@ -103,7 +109,7 @@ No dump atual, sao criadas duas bases:
 - `bd_framework_1`
 - `bd_framework_2`
 
-Configure `BD_NOME_PT_BR` e `BD_NOME_EN_US` no arquivo `configuracao.{ambiente}.php` apontando para os bancos correspondentes ao portugues e ao ingles no seu ambiente.
+Configure `BD_NOME_PT_BR` e `BD_NOME_EN_US` no arquivo `configuracao.php` apontando para os bancos correspondentes ao portugues e ao ingles no seu ambiente.
 
 Exemplo:
 
@@ -147,7 +153,7 @@ As tabelas principais do exemplo sao:
 ## Ciclo de Vida da Requisicao
 
 1. O servidor entrega a requisicao para `index.php`.
-2. `App\Nucleo\Inclusao` registra o autoload.
+2. `Inclusao` (em `nucleo/Inclusao.php`) registra o autoload.
 3. `App\Nucleo\Aplicacao::executa()` inicia sessao, token BFF, tema e roteamento.
 4. `Aplicacao::urlSolicitada()` normaliza a URI, inclusive em subdiretorios.
 5. `Roteamento::rotaExecuta()` encontra a rota em `Rota::ROTA_LISTA`.
@@ -185,7 +191,7 @@ Centraliza ambiente e variaveis de configuracao.
 - Define ambientes como `AMBIENTE_LOCAL`, `AMBIENTE_PRODUCAO` e `AMBIENTE_INDEFINIDO`.
 - Expoe credenciais, servicos externos, email, paginacao e flags de exibicao.
 - Evita que a view ou o JavaScript dependam diretamente do nome do ambiente.
-- `ambienteSeleciona()`: le e valida `APP_AMBIENTE`.
+- `ambienteSeleciona()`: le e valida `APP_AMBIENTE` definido no arquivo `configuracao.php`.
 - `ambienteAtual()`: retorna o ambiente atual ou `AMBIENTE_INDEFINIDO` quando nao configurado.
 - `appEmail()`, `bdServidor()`, `bdUsuarioPTBR()`, `bdUsuarioENUS()`, `bdSenha()`, `bdNomePTBR()`, `bdNomeENUS()`: acessores de configuracao da aplicacao e banco.
 - `googleAnalyticsId()`, `googleAdClientId()`, `googleAdTag()`, `googleAdSlot()`, `appPaypalId()`: acessores de integracoes externas.
@@ -238,7 +244,7 @@ Fonte unica de verdade das URLs.
 - Constantes `PARAMETRO_*`: nomes de parametros de rota ou filtro.
 - `ROTA_LISTA`: mapa com metodo HTTP, URI e manipulador.
 - `rotaUrl(string $rota, array $parametros = [], array $filtros = [], ?string $idioma = null)`: gera URL para rota nomeada.
-- `rotaInicio()`, `rotaInicioPadrao()`, `rotaSobre()`, `rotaItens()`, `rotaItem(string $idItem)`: atalhos para rotas usadas nas views.
+- `rotaInicio()`, `rotaInicioPadrao()`, `rotaSobre()`, `rotaItens()`, `rotaItem(string $idItem)`, `rotaRobo()`, `rotaAds()`: atalhos para rotas usadas nas views e arquivos tecnicos.
 - `rotaItensFiltro(...)`: monta URL amigavel com query string de filtros.
 - `rotaItensFiltroBFF()` e `rotaItensPaginacaoBFF()`: URLs dos endpoints assincronos.
 
@@ -342,7 +348,7 @@ Controller web da entidade de exemplo `Item`.
 - `itemSeleciona($parametroLista)`: recebe `{id_item}`, consulta item e relacionados, monta `VMItemSeleciona` e renderiza `Pagina::ITEM_SELECAO`.
 - Usa `DTOItemFiltro` para normalizar filtros.
 - Usa `VPItemLista` e `VPItemSelecao` para adaptar entidades de banco para a view.
-- Em fluxos com varias consultas, como `itemSeleciona()`, pode manter a conexao aberta com `BDConexao::conexaoInicia()` e fecha-la em `finally` com `conexaoFinaliza()`.
+- Em fluxos com varias consultas, como `itemSeleciona()`, pode manter a conexao aberta com `BDConexao::bdInstancia()->conexaoInicia()` e fecha-la em `finally` com `conexaoFinaliza()`.
 
 #### `BFFItem`
 
@@ -354,11 +360,11 @@ Controller BFF da entidade `Item`.
 
 #### `BFFContratoItem`
 
-Contrato de nomes específico da entidade `Item` para integração BFF.
+Contrato de nomes especifico da entidade `Item` para integracao BFF.
 
-- Centraliza chaves de entrada e saída para requisições assincronos do modulo `Item`.
+- Centraliza chaves de entrada e saida para requisicoes assincronas do modulo `Item`.
 - Evita strings soltas entre `principal.js` e `BFFItem`.
-- Complementa `BFFContrato` com constantes específicas do dominio.
+- Complementa `BFFContrato` com constantes especificas do dominio.
 
 #### `CValidacao`
 
@@ -393,6 +399,12 @@ Resposta de paginacao assincrona.
 
 - Transporta o HTML renderizado do fragmento.
 - Transporta o novo deslocamento da lista.
+
+#### `DTOBFFRespostaRequisicao`
+
+Resposta de requisicao assincrona com fragmento HTML.
+
+- Transporta o HTML renderizado da visao para substituicao no alvo da pagina (`data-bff-target`).
 
 #### `DTOAppConfiguracao`
 
@@ -483,14 +495,14 @@ Base para paginas com layout.
 - `textoNavegacao(string $chave)`, `textoRodape(string $chave)`, `textoMenu(string $chave)`, `textoLateral(string $chave)`: leem textos estruturais.
 - `textoConteudoSeleciona(string $chave)`: le textos especificos da pagina.
 
-#### `VMBaseErro`
+#### `VMBasePaginaErro`
 
 ViewModel de paginas de erro.
 
 - Guarda mensagem de erro e flag de exibicao.
 - Permite mostrar detalhes no ambiente local e ocultar em producao.
 
-#### `VMBaseGenerico`
+#### `VMBasePaginaGenerica`
 
 ViewModel para paginas tecnicas ou simples.
 
@@ -503,6 +515,19 @@ Base para fragmentos renderizados sem layout.
 
 - `textoConteudoSeleciona(string $chave)`: le textos especificos do fragmento.
 - Usado pelo BFF para retornar HTML parcial.
+
+#### `VMBaseFragmentoErro`
+
+ViewModel de fragmentos de erro para fluxos assincronos ou parciais.
+
+- Guarda mensagem de erro e flag de exibicao.
+- Permite renderizar mensagens de erro parciais via BFF.
+
+#### `VMBaseFragmentoGenerico`
+
+ViewModel para fragmentos simples sem dependencias complexas.
+
+- `sucesso(?array $textoConteudo)`: fabrica uma instancia com textos especificos do fragmento.
 
 #### `VMMapeamento`
 
@@ -572,6 +597,7 @@ Transporta todos os dados globais necessarios para views e JavaScript:
 **Rotas:**
 
 - `rotaRaiz`, `rotaInicio`, `rotaSobre`, `rotaContato`, `rotaTermosUso`, `rotaPoliticaPrivacidade`: rotas institucionais.
+- `rotaRobo`, `rotaAds`: rotas de arquivos tecnicos (`robots.txt` e `app-ads.txt`).
 - `rotaItens`: rota de listagem de itens.
 - `rotaLinguagemPortugues`, `rotaLinguagemIngles`: rotas de troca de idioma.
 - `rotaMapeamentoPortugues`, `rotaMapeamentoIngles`: rotas de sitemap por idioma.
@@ -611,9 +637,9 @@ Presenter de item selecionado.
 
 Presenter de tipo de item.
 
-- Converte entidades `BDItemTipo` em dados formatados para exibição.
-- Prepara dados de tipos para filtros e seleções.
-- Centraliza formatação de tipos de item na apresentação.
+- Converte entidades `BDItemTipo` em dados formatados para exibicao.
+- Prepara dados de tipos para filtros e selecoes.
+- Centraliza formatacao de tipos de item na apresentacao.
 
 ### Views (`visao/`)
 
@@ -734,6 +760,14 @@ Endpoints BFF devem ser gerados por `Rota` e, por padrao, tambem recebem o prefi
 5. `Renderizacao::fragmento()` gera HTML parcial.
 6. O JSON retorna HTML e novo deslocamento.
 7. O JavaScript adiciona o HTML ao container.
+
+### Fluxo de requisicao
+
+1. A view renderiza um formulario assincrono com `data-bff-tipo="requisicao"` e define o seletor alvo em `data-bff-target`.
+2. `js/principal.js` envia os dados via AJAX com o token de sessao.
+3. O endpoint BFF valida a requisicao, processa a acao e renderiza o fragmento correspondente com `Renderizacao::fragmento()`.
+4. O controller retorna a resposta usando `DTOBFFRespostaRequisicao` com a chave `visao`.
+5. Em sucesso (`resposta.estado`), o JavaScript substitui o conteudo HTML do elemento indicado por `data-bff-target` com `resposta.visao`.
 
 ## Modulo de Exemplo: Item
 
@@ -1030,7 +1064,7 @@ Exemplo: espanhol `es-es`.
 3. Traduza mantendo as mesmas chaves.
 4. Em `nucleo/Idioma.php`, adicione constante e metodo do novo idioma.
 5. Atualize a lista de idiomas suportados.
-6. Se o idioma usar outra base de dados, adicione as chaves em `Configuracao` e no arquivo `configuracao.{ambiente}.php`.
+6. Se o idioma usar outra base de dados, adicione as chaves em `Configuracao` e no arquivo `configuracao.php`.
 7. Em `VPDado`, adicione a rota de troca de idioma se ela precisar aparecer na interface.
 8. Em `MApp::dado()`, preencha a nova rota com `Rota::rotaLinguagem(...)`.
 9. Atualize o componente de idioma na view.
@@ -1069,32 +1103,28 @@ Para uma entidade `Produto`, use:
 
 ## Troubleshooting
 
-### Ambiente nao configurado
+### Arquivo de configuracao nao encontrado
 
 Erro comum:
 
 ```text
-Ambiente nao configurado. Defina APP_AMBIENTE no servidor.
+Arquivo de configuracao nao encontrado: .../configuracao.php
 ```
 
-Verifique se `APP_AMBIENTE` existe no servidor e se o arquivo `configuracao.{ambiente}.php` correspondente esta na raiz do projeto.
+Copie `configuracao.exemplo.php` para `configuracao.php` na raiz do projeto e preencha as credenciais e chaves obrigatorias.
 
 ### Ambiente invalido
 
-Use apenas valores suportados por `Configuracao`:
+Erro comum:
+
+```text
+Ambiente invalido: homologacao
+```
+
+Verifique o valor da chave `APP_AMBIENTE` dentro de `configuracao.php`. Use apenas valores suportados por `Configuracao`:
 
 - `local`
 - `producao`
-
-### Arquivo de configuracao nao encontrado
-
-Se `APP_AMBIENTE=local`, o arquivo esperado e:
-
-```text
-configuracao.local.php
-```
-
-Copie `configuracao.exemplo.php`, renomeie e preencha as chaves obrigatorias.
 
 ### Chave obrigatoria ausente
 
@@ -1138,7 +1168,7 @@ Confira se:
 
 O BFF valida o token `codigoSolicitacao` da sessao. Confira se:
 
-- a pagina renderizou `VPDado::appCodigoSolicitacao`;
+- a pagina renderizou `$visaoModelo->dadoSeleciona()->appCodigoSolicitacao`;
 - o JavaScript enviou a chave definida em `BFFContrato`;
 - a sessao PHP esta ativa;
 - a chamada esta usando o endpoint BFF correto.
