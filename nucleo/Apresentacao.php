@@ -49,7 +49,6 @@ class Apresentacao
 
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $imagemMimeType = finfo_file($finfo, $imagemCaminho);
-            finfo_close($finfo);
 
             if (!$imagemMimeType) {
 
