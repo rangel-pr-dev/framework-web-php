@@ -12,7 +12,7 @@ use App\Visao_Apresentacao\VPItemLista;
 
 use App\Servico\AppServico;
 
-use App\Visao_Modelo\VMBaseGenerico;
+use App\Visao_Modelo\VMBasePaginaGenerica;
 use App\Visao_Modelo\VMInicio;
 use App\Visao_Modelo\VMSobre;
 
@@ -78,7 +78,7 @@ class CInicio
     {
         $appModelo = new MApp();
 
-        $visaoModelo = VMBaseGenerico::sucesso(
+        $visaoModelo = VMBasePaginaGenerica::sucesso(
             $appModelo->dado(false, true),
             $appModelo->textoPagina(Pagina::APP_CONTATO),
         );
@@ -90,7 +90,7 @@ class CInicio
     {
         $appModelo = new MApp();
 
-        $visaoModelo = VMBaseGenerico::sucesso(
+        $visaoModelo = VMBasePaginaGenerica::sucesso(
             $appModelo->dado(false, true),
             $appModelo->textoPagina(Pagina::APP_TERMOS_USO),
         );
@@ -102,7 +102,7 @@ class CInicio
     {
         $appModelo = new MApp();
 
-        $visaoModelo = VMBaseGenerico::sucesso(
+        $visaoModelo = VMBasePaginaGenerica::sucesso(
             $appModelo->dado(false, true),
             $appModelo->textoPagina(Pagina::APP_POLITICA_PRIVACIDADE),
         );

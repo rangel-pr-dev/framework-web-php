@@ -3,7 +3,7 @@ namespace App\Visao_Modelo;
 
 use App\Visao_Apresentacao\VPDado;
 
-class VMBaseErro extends VMBasePagina
+class VMBasePaginaErro extends VMBasePagina
 {
     //
     protected ?string $erroMensagem = null;
@@ -16,7 +16,7 @@ class VMBaseErro extends VMBasePagina
      * @param ?array $textoConteudo
      * @param ?string $erroMensagem
      * @param bool $erroMensagemExibe
-     * @return VMBaseErro
+     * @return VMBasePaginaErro
      */
     public static function sucesso(
         VPDado $dado,

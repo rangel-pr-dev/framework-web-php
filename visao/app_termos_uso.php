@@ -1,5 +1,5 @@
 <?php
-/** @var App\Visao_Modelo\VMBaseGenerico $visaoModelo */
+/** @var App\Visao_Modelo\VMBasePaginaGenerica $visaoModelo */
 ?>
 <div class="row">
     <div class="col-12">

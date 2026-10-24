@@ -1,5 +1,5 @@
 <?php
-/** @var App\Visao_Modelo\VMBaseErro $visaoModelo */
+/** @var App\Visao_Modelo\VMBasePaginaErro $visaoModelo */
 ?>
 <div class="row vh-100 align-items-center">
     <div class="col-12">

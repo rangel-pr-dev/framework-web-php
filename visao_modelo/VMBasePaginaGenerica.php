@@ -3,12 +3,12 @@ namespace App\Visao_Modelo;
 
 use App\Visao_Apresentacao\VPDado;
 
-class VMBaseGenerico extends VMBasePagina
+class VMBasePaginaGenerica extends VMBasePagina
 {
     /**
      * @param VPDado $dado
      * @param ?array $textoConteudo
-     * @return VMBaseGenerico
+     * @return VMBasePaginaGenerica
      */
     public static function sucesso(
 

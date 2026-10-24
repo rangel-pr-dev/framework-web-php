@@ -16,8 +16,8 @@ use App\Modelo\MItem;
 
 use App\Controle\Dado\DTOAppConfiguracao;
 
-use App\Visao_Modelo\VMBaseErro;
-use App\Visao_Modelo\VMBaseGenerico;
+use App\Visao_Modelo\VMBasePaginaErro;
+use App\Visao_Modelo\VMBasePaginaGenerica;
 use App\Visao_Modelo\VMMapeamento;
 
 class CApp
@@ -32,24 +32,21 @@ class CApp
     //
     public static function appErro404()
     {
-        http_response_code(404);
-
         $appModelo = new MApp();
 
-        $visaoModelo = VMBaseErro::sucesso(
+        $visaoModelo = VMBasePaginaErro::sucesso(
             $appModelo->dado(),
             $appModelo->textoPagina(Pagina::APP_ERRO_404),
             null,
             false
         );
 
+        http_response_code(404);
         Renderizacao::paginaComLayout(Pagina::APP_ERRO_404, $visaoModelo);
     }
 
     public static function appErro405(array $metodoPermitidoLista = [])
     {
-        http_response_code(405);
-
         $appModelo = new MApp();
 
         $textoConteudo = $appModelo->textoPagina(Pagina::APP_ERRO_405);
@@ -62,13 +59,14 @@ class CApp
             )
             : null;
 
-        $visaoModelo = VMBaseErro::sucesso(
+        $visaoModelo = VMBasePaginaErro::sucesso(
             $appModelo->dado(),
             $textoConteudo,
             $erroMensagem,
             $erroMensagem !== null
         );
 
+        http_response_code(405);
         Renderizacao::paginaComLayout(Pagina::APP_ERRO_405, $visaoModelo);
     }
 
@@ -77,17 +75,16 @@ class CApp
         ?string $erroMensagem = null,
         string $ambiente = Configuracao::AMBIENTE_INDEFINIDO
     ) {
-        http_response_code(500);
-
         $appModelo = new MApp();
 
-        $visaoModelo = VMBaseErro::sucesso(
+        $visaoModelo = VMBasePaginaErro::sucesso(
             $appModelo->dado(),
             $appModelo->textoPagina(Pagina::APP_ERRO_500),
             $erroMensagem,
             $ambiente === Configuracao::AMBIENTE_LOCAL
         );
 
+        http_response_code(500);
         Renderizacao::paginaComLayout(Pagina::APP_ERRO_500, $visaoModelo);
     }
 
@@ -95,11 +92,11 @@ class CApp
     public static function appADS()
     {
         $appModelo = new MApp();
-        header("Content-Type: text/plain");
-        $visaoModelo = VMBaseGenerico::sucesso(
+        $visaoModelo = VMBasePaginaGenerica::sucesso(
             $appModelo->dado(),
             $appModelo->textoPagina(Pagina::APP_ADS)
         );
+        header("Content-Type: text/plain");
         Renderizacao::paginaSemLayout(Pagina::APP_ADS, $visaoModelo);
     }
 
@@ -107,11 +104,11 @@ class CApp
     public static function appRobots()
     {
         $appModelo = new MApp();
-        header("Content-Type: text/plain");
-        $visaoModelo = VMBaseGenerico::sucesso(
+        $visaoModelo = VMBasePaginaGenerica::sucesso(
             $appModelo->dado(),
             $appModelo->textoPagina(Pagina::APP_ROBOTS)
         );
+        header("Content-Type: text/plain");
         Renderizacao::paginaSemLayout(Pagina::APP_ROBOTS, $visaoModelo);
     }
 
