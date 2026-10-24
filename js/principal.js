@@ -225,6 +225,11 @@ window.App.bff.inicializaFormulario = function (formulario) {
 
                 estado = (resposta.deslocamento == deslocamentoAnterior);
             }
+
+            if (tipo === "requisicao" && resposta.estado) {
+
+                $(formulario.data("bffTarget")).html(resposta.visao);
+            }
         });
         requisicao.fail(function (requisicaoFalha, estadoFalha, erro) {
 
