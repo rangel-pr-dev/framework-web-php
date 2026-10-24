@@ -3,6 +3,7 @@
 ?>
 <nav class="navbar navbar-expand-lg fixed-top shadow <?php echo ($visaoModelo->dadoSeleciona()->tema === 'noite') ? 'bg-dark' : 'bg-light'; ?>" data-bs-theme="<?php echo ($visaoModelo->dadoSeleciona()->tema === 'noite') ? 'dark' : 'light'; ?>">
     <div class="<?php echo ($visaoModelo->dadoSeleciona()->layoutFluido) ? "container-fluid" : "container"; ?>">
+        <!-- logomarca -->
         <a class="navbar-brand text-truncate" style="max-width: 50%;" href="<?php echo $visaoModelo->dadoSeleciona()->rotaInicio; ?>">
             <img class="d-inline-block align-top rounded-circle me-2" src="<?php echo $visaoModelo->dadoSeleciona()->logomarca; ?>" width="32" height="32" alt="<?php echo $visaoModelo->textoNavegacao("titulo"); ?>">
             <?php echo $visaoModelo->textoNavegacao("titulo"); ?>
