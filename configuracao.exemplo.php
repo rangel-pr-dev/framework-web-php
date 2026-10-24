@@ -2,9 +2,14 @@
 return [
 
     // App Configuração
+    
+    // Ambiente, defina como "local" ou "producao"
+    "APP_AMBIENTE" => "local",
+
+    // Informações
     "APP_EMAIL" => "contato@seu-dominio.com",
 
-    // Base Dado
+    // Base de dados
     "BD_SERVIDOR" => "localhost",
     "BD_USUARIO_PT_BR" => "usuario_pt_br",
     "BD_USUARIO_EN_US" => "usuario_en_us",

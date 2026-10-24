@@ -41,6 +41,7 @@ class Configuracao
     private const CONFIGURACAO_CHAVE_LISTA = [
 
             // App Configuração
+        self::CONFIGURACAO_CHAVE_AMBIENTE,
         self::CONFIGURACAO_CHAVE_APP_EMAIL,
 
             // Base Dado
@@ -67,15 +68,9 @@ class Configuracao
     //
     public static function ambienteSeleciona(): string
     {
-        $ambiente =
-            $_SERVER[self::CONFIGURACAO_CHAVE_AMBIENTE]
-            ?? getenv(self::CONFIGURACAO_CHAVE_AMBIENTE)
-            ?? null;
+        $configuracao = self::configuracaoCarrega();
 
-        if ($ambiente === null || $ambiente === "") {
-
-            throw new Erro("Ambiente nao configurado. Defina " . self::CONFIGURACAO_CHAVE_AMBIENTE . " no servidor.");
-        }
+        $ambiente = $configuracao[self::CONFIGURACAO_CHAVE_AMBIENTE];
 
         $ambienteLista = [
             self::AMBIENTE_LOCAL,
@@ -125,12 +120,11 @@ class Configuracao
             return self::$configuracao;
         }
 
-        $ambiente = self::ambienteSeleciona();
-        $arquivo = dirname(__DIR__) . "/configuracao.$ambiente.php";
+        $arquivo = dirname(__DIR__) . "/configuracao.php";
 
         if (!file_exists($arquivo)) {
 
-            throw new Erro("Arquivo de configuracao nao encontrado para o ambiente: $ambiente");
+            throw new Erro("Arquivo de configuracao nao encontrado: $arquivo");
         }
 
         $configuracao = include $arquivo;
@@ -196,14 +190,17 @@ class Configuracao
     {
         return self::configuracaoValor(self::CONFIGURACAO_CHAVE_GOOGLE_ANALYTICS_ID);
     }
+
     public static function googleAdClientId(): ?string
     {
         return self::configuracaoValor(self::CONFIGURACAO_CHAVE_GOOGLE_AD_CLIENT);
     }
+
     public static function googleAdTag(): string
     {
         return self::configuracaoValor(self::CONFIGURACAO_CHAVE_APP_ADS_TAG);
     }
+
     public static function googleAdSlot(): ?string
     {
         return self::configuracaoValor(self::CONFIGURACAO_CHAVE_GOOGLE_AD_SLOT);
