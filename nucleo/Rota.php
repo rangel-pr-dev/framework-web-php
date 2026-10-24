@@ -12,8 +12,8 @@ class Rota
 {
     //
     public const ROTA_RAIZ = "RAIZ";
-    public const ROTA_ADS = "ADS";
     public const ROTA_ROBOTS = "ROBOTS";
+    public const ROTA_ADS = "ADS";
     public const ROTA_MAPEAMENTO = "MAPEAMENTO";
 
     //
@@ -62,17 +62,17 @@ class Rota
             self::ROTA_URI => "/",
             self::ROTA_MANIPULADOR => [CApp::class, "appRaiz"]
         ],
-        self::ROTA_ADS => [
-
-            self::ROTA_METODO => "GET",
-            self::ROTA_URI => '/app-ads.txt',
-            self::ROTA_MANIPULADOR => [CApp::class, "appADS"]
-        ],
         self::ROTA_ROBOTS => [
 
             self::ROTA_METODO => "GET",
             self::ROTA_URI => '/robots.txt',
             self::ROTA_MANIPULADOR => [CApp::class, "appRobots"]
+        ],
+        self::ROTA_ADS => [
+
+            self::ROTA_METODO => "GET",
+            self::ROTA_URI => '/app-ads.txt',
+            self::ROTA_MANIPULADOR => [CApp::class, "appADS"]
         ],
         self::ROTA_MAPEAMENTO => [
 
@@ -221,6 +221,16 @@ class Rota
     public static function rotaRaiz(): string
     {
         return self::rotaUrl(self::ROTA_RAIZ);
+    }
+
+    public static function rotaRobo(): string
+    {
+        return self::rotaUrl(self::ROTA_ROBOTS);
+    }
+
+    public static function rotaAds(): string
+    {
+        return self::rotaUrl(self::ROTA_ADS);
     }
 
     // rota : app

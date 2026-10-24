@@ -102,6 +102,8 @@ class MApp
 
             // Rotas
             Rota::rotaRaiz(),
+            Rota::rotaRobo(),
+            Rota::rotaAds(),
 
             Rota::rotaLinguagem(Idioma::idiomaPTBR()),
             Rota::rotaLinguagem(Idioma::idiomaENUS()),

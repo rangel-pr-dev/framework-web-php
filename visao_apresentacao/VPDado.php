@@ -35,6 +35,8 @@ class VPDado
 
     // Rotas
     public string $rotaRaiz;
+    public string $rotaRobo;
+    public string $rotaAds;
 
     public string $rotaLinguagemPortugues;
     public string $rotaLinguagemIngles;
@@ -100,6 +102,8 @@ class VPDado
 
         // Rotas
         string $rotaRaiz,
+        string $rotaRobo,
+        string $rotaAds,
 
         string $rotaLinguagemPortugues,
         string $rotaLinguagemIngles,
@@ -163,6 +167,8 @@ class VPDado
 
         // Rotas
         $this->rotaRaiz = $rotaRaiz;
+        $this->rotaRobo = $rotaRobo;
+        $this->rotaAds = $rotaAds;
 
         $this->rotaLinguagemPortugues = $rotaLinguagemPortugues;
         $this->rotaLinguagemIngles = $rotaLinguagemIngles;
@@ -230,6 +236,8 @@ class VPDado
 
             // Rotas
             "rotaRaiz" => $this->rotaRaiz,
+            "rotaRobo" => $this->rotaRobo,
+            "rotaAds" => $this->rotaAds,
 
             "rotaLinguagemPortugues" => $this->rotaLinguagemPortugues,
             "rotaLinguagemIngles" => $this->rotaLinguagemIngles,
